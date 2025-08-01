@@ -1,5 +1,7 @@
 server:
   port: 39090
+  servlet:
+    context-path: /
   tomcat:
     uri-encoding: UTF-8
     max-swallow-size: -1
@@ -28,5 +30,8 @@ knife4j:
     language: zh_cn
 
 logging:
+  file:
+    path: /log/${spring.application.name}
+  config: classpath:log/logback-spring.xml
   level:
     root: info

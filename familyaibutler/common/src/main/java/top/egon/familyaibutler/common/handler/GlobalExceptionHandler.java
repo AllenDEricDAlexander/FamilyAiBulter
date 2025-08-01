@@ -22,6 +22,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public Result<String> handlerException(Exception e) {
         log.error("系统异常", e);
-        return Result.fail(ResultCode.INVALID_PARAM.getCode(), "系统出现异常，请联系运营人员协调处理", "系统出现异常，请联系运营人员协调处理");
+        return Result.fail(ResultCode.INVALID_PARAM.getCode(), e.getMessage(), "系统出现异常，请联系运营人员协调处理");
     }
 }
