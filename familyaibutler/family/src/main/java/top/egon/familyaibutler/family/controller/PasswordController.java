@@ -1,5 +1,10 @@
 package top.egon.familyaibutler.family.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
@@ -22,6 +27,7 @@ import java.security.SecureRandom;
 @RestController
 @RequestMapping("/password")
 @Validated
+@Tag(name = "密码管理相关接口")
 public class PasswordController {
 
     private static final String UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -31,6 +37,11 @@ public class PasswordController {
 
     private static final int PASSWORD_LENGTH = 12;
 
+    @Operation(summary = "生成一个随机密码")
+    @Parameters({
+            @Parameter(name = "passwordLength", description = "passwordLength", in = ParameterIn.PATH, required = true),
+            @Parameter(name = "needSpecialCharacters", description = "needSpecialCharacters", in = ParameterIn.PATH)
+    })
     @GetMapping(value = {"/generate/{passwordLength}/{needSpecialCharacters}", "/generate/{passwordLength}"})
     public String generatePassword(@PathVariable(value = "passwordLength") @Range(min = 12, max = 24, message = "密码生成长度在12-24之间") Integer passwordLength,
                                    @PathVariable(value = "needSpecialCharacters", required = false) Boolean needSpecialCharacters) {

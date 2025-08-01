@@ -2,6 +2,8 @@ package top.egon.familyaibutler.family;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.Environment;
 
 /**
  * @BelongsProject: familyaibutler
@@ -14,7 +16,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 public class FamilyApplication {
+
     public static void main(String[] args) {
-        SpringApplication.run(FamilyApplication.class, args);
+        SpringApplication app = new SpringApplication(FamilyApplication.class);
+        ConfigurableApplicationContext application = app.run(args);
+        Environment env = application.getEnvironment();
     }
 }

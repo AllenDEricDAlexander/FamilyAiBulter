@@ -1,0 +1,25 @@
+server:
+  port: 80
+  tomcat:
+    uri-encoding: UTF-8
+    max-swallow-size: -1
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          enabled: true
+          routes:
+            - id: family
+              uri: http://127.0.0.1:39090
+              predicates:
+                - name: Path
+                  args:
+                    - /base/**
+              filters:
+                - StripPrefix=1
+logging:
+  level:
+    root: debug
