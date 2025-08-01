@@ -8,18 +8,31 @@ spring:
     name: gateway
   cloud:
     gateway:
-      server:
-        webflux:
-          enabled: true
-          routes:
-            - id: family
-              uri: http://127.0.0.1:39090
-              predicates:
-                - name: Path
-                  args:
-                    - /base/**
-              filters:
-                - StripPrefix=1
+      enabled: true
+      routes:
+        - id: family
+          uri: http://127.0.0.1:39090
+          predicates:
+            - name: Path
+              args:
+                - /base/**
+          filters:
+            - StripPrefix=1
+
 logging:
   level:
-    root: debug
+    root: info
+
+
+knife4j:
+  gateway:
+    enabled: true
+    tags-sorter: alpha
+    operations-sorter: alpha
+    strategy: manual
+    routes:
+      - name: family
+        url: /base/v3/api-docs?group=default
+        service-name: family
+        context-path: /base
+        order: 1

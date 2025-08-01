@@ -4,17 +4,17 @@ server:
     uri-encoding: UTF-8
     max-swallow-size: -1
 spring:
+  profiles:
+    active: dev
   application:
-    name: family
-
-
+    name: familyBaseModel
 
 springdoc:
   api-docs:
-    enabled: true # 开启OpenApi接口
+    enabled: true
     path: /v3/api-docs
   swagger-ui:
-    enabled: true # 开启swagger界面，依赖OpenApi，需要OpenApi同时开启
+    enabled: true
     path: /swagger-ui.html
     tags-sorter: alpha
     operations-sorter: alpha
@@ -22,7 +22,6 @@ springdoc:
     - group: 'default'
       paths-to-match: '/**'
       packages-to-scan: top.egon.familyaibutler.family
-# knife4j的增强配置，不需要增强可以不配
 knife4j:
   enable: true
   setting:

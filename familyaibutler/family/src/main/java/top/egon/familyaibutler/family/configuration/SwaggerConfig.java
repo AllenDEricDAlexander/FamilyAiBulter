@@ -22,11 +22,11 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI swaggerOpenApi() {
         return new OpenAPI()
-                .info(new Info().title("Swagger学习-比晚风温柔")
-                        .description("Swagger简单入门")
-                        .version("v1.0"))
+                .info(new Info().title("FamilyAIButler-BaseModel")
+                        .description("FamilyAIButler-BaseModel")
+                        .version("v0.0.1"))
                 .externalDocs(new ExternalDocumentation()
-                        .description("我的博客")
-                        .url("https://blog.csdn.net/2202_76007821?spm=1000.2115.3001.5343"));
+                        .description("blog")
+                        .url("https://allendericdalexander.github.io/"));
     }
 }

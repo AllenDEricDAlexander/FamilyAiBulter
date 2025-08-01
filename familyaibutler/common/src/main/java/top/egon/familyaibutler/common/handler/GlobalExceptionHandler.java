@@ -1,4 +1,4 @@
-package top.egon.familyaibutler.family.handler;
+package top.egon.familyaibutler.common.handler;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
