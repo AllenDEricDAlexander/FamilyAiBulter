@@ -2,8 +2,10 @@ package top.egon.familyaibutler.family.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.util.ObjectUtils;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import top.egon.familyaibutler.common.pojo.Result;
 
 import java.security.SecureRandom;
 
@@ -37,14 +40,14 @@ public class PasswordController {
 
     private static final int PASSWORD_LENGTH = 12;
 
-    @Operation(summary = "生成一个随机密码")
-    @Parameters({
-            @Parameter(name = "passwordLength", description = "passwordLength", in = ParameterIn.PATH, required = true),
-            @Parameter(name = "needSpecialCharacters", description = "needSpecialCharacters", in = ParameterIn.PATH)
-    })
+    @Operation(summary = "生成一个随机密码", description = "生成一个随机密码", parameters = {
+            @Parameter(name = "passwordLength", description = "passwordLength", in = ParameterIn.PATH, required = true, example = "16"),
+            @Parameter(name = "needSpecialCharacters", description = "needSpecialCharacters", in = ParameterIn.PATH, example = "true")
+    }, responses = {@ApiResponse(description = "返回一个字符串", responseCode = "10000",
+            content = @Content(schema = @Schema(implementation = Result.class, description = "随机密码", name = "随机密码", title = "随机密码", example = "W7%@pQJt16ZeN&2u"))),})
     @GetMapping(value = {"/generate/{passwordLength}/{needSpecialCharacters}", "/generate/{passwordLength}"})
-    public String generatePassword(@PathVariable(value = "passwordLength") @Range(min = 12, max = 24, message = "密码生成长度在12-24之间") Integer passwordLength,
-                                   @PathVariable(value = "needSpecialCharacters", required = false) Boolean needSpecialCharacters) {
+    public Result<String> generatePassword(@PathVariable(value = "passwordLength") @Range(min = 12, max = 24, message = "密码生成长度在12-24之间") Integer passwordLength,
+                                           @PathVariable(value = "needSpecialCharacters", required = false) Boolean needSpecialCharacters) {
         int realLength = PASSWORD_LENGTH;
         if (!ObjectUtils.isEmpty(passwordLength)) {
             realLength = passwordLength;
@@ -53,7 +56,7 @@ public class PasswordController {
         if (!ObjectUtils.isEmpty(needSpecialCharacters)) {
             isRealNeed = needSpecialCharacters;
         }
-        return generatePassword(realLength, isRealNeed);
+        return Result.success(generatePassword(realLength, isRealNeed));
     }
 
     /**

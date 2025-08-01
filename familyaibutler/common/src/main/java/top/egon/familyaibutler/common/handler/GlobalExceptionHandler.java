@@ -1,7 +1,10 @@
 package top.egon.familyaibutler.common.handler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import top.egon.familyaibutler.common.enums.ResultCode;
+import top.egon.familyaibutler.common.pojo.Result;
 
 /**
  * @BelongsProject: familyaibutler
@@ -13,10 +16,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * @Version: 1.0
  */
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    public String handlerException(Exception e) {
-        return e.getMessage();
+    public Result<String> handlerException(Exception e) {
+        log.error("系统异常", e);
+        return Result.fail(ResultCode.INVALID_PARAM.getCode(), "系统出现异常，请联系运营人员协调处理", "系统出现异常，请联系运营人员协调处理");
     }
 }
