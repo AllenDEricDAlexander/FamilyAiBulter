@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import lombok.experimental.SuperBuilder;
 import top.egon.familyaibutler.common.enums.ResultCode;
 
 import java.io.Serial;
@@ -23,6 +24,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
+@SuperBuilder
 @Schema(title = "全局接口统一返回对象", name = "Result")
 public class Result<T> implements Serializable {
     @Serial

@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import lombok.experimental.ExtensionMethod;
+import lombok.experimental.SuperBuilder;
 import top.egon.familyaibutler.common.enums.ResultCode;
 
 import java.io.Serial;
@@ -25,8 +25,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder(builderMethodName = "PageResultBuilder")
 @Accessors(chain = true)
-@ExtensionMethod({Result.class})
 @Schema(title = "全局接口统一返回分页对象", name = "PageResult")
 public class PageResult<T> extends Result<List<T>> {
     @Serial
