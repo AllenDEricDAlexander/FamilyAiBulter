@@ -35,23 +35,23 @@ public class PageResult<T> extends Result<List<T>> {
     @Schema(title = "总量", name = "total", defaultValue = "100", type = "long")
     private Long total;
     @Schema(title = "页号", name = "pageNum", defaultValue = "0", type = "int")
-    private Integer pageNum;
+    private Long pageNum;
     @Schema(title = "页大小", name = "pageSize", defaultValue = "10", type = "int")
-    private Integer pageSize;
+    private Long pageSize;
 
-    public static <T> PageResult<T> success(List<T> data, Long total, Integer pageNum, Integer pageSize) {
+    public static <T> PageResult<T> success(List<T> data, Long total, Long pageNum, Long pageSize) {
         return new PageResult<>(ResultCode.SUCCESS.getCode(), "success", true, data, pageNum, pageSize, total);
     }
 
-    public static <T> PageResult<T> fail(Integer code, String msg, List<T> data, Long total, Integer pageNum, Integer pageSize) {
+    public static <T> PageResult<T> fail(Integer code, String msg, List<T> data, Long total, Long pageNum, Long pageSize) {
         return new PageResult<>(code, msg, true, data, pageNum, pageSize, total);
     }
 
-    public static <T> PageResult<T> pageResult(Integer code, String msg, Boolean success, List<T> data, Long total, Integer pageNum, Integer pageSize) {
+    public static <T> PageResult<T> pageResult(Integer code, String msg, Boolean success, List<T> data, Long total, Long pageNum, Long pageSize) {
         return new PageResult<>(code, msg, success, data, pageNum, pageSize, total);
     }
 
-    public PageResult(Integer code, String message, Boolean success, List<T> data, Integer pageNum, Integer pageSize, Long total) {
+    public PageResult(Integer code, String message, Boolean success, List<T> data, Long pageNum, Long pageSize, Long total) {
         super(code, message, success, data);
         this.pageNum = pageNum;
         this.pageSize = pageSize;

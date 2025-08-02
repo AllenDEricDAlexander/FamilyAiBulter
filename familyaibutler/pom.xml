@@ -79,6 +79,16 @@
                 <artifactId>knife4j-gateway-spring-boot-starter</artifactId>
                 <version>4.4.0</version>
             </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+                <version>3.5.10</version>
+            </dependency>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>42.7.7</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

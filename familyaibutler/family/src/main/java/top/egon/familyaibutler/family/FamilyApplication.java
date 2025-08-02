@@ -1,6 +1,7 @@
 package top.egon.familyaibutler.family;
 
 import lombok.extern.slf4j.Slf4j;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -21,6 +22,7 @@ import java.net.UnknownHostException;
  */
 @Slf4j
 @SpringBootApplication
+@MapperScan("top.egon.familyaibutler.family.repository.mapper")
 @ComponentScan(basePackages = {"top.egon.familyaibutler.family", "top.egon.familyaibutler.common"})
 public class FamilyApplication {
 

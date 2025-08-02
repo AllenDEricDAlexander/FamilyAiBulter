@@ -28,6 +28,12 @@ spring:
   application:
     name: familyBaseModel
 
+mybatis-plus:
+  mapper-locations: classpath*:mybatis/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+
 springdoc:
   api-docs:
     enabled: true

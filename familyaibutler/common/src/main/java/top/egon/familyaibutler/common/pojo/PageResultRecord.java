@@ -16,19 +16,19 @@ import java.util.List;
  * @Version: 1.0
  */
 public record PageResultRecord<T>(Integer code, String message, Boolean success, List<T> data, Long total,
-                                  Integer pageNum, Integer pageSize) implements Serializable {
+                                  Long pageNum, Long pageSize) implements Serializable {
     @Serial
     private static final long serialVersionUID = 8938942437517754680L;
 
-    public static <T> PageResult<T> success(List<T> data, Long total, Integer pageNum, Integer pageSize) {
+    public static <T> PageResult<T> success(List<T> data, Long total, Long pageNum, Long pageSize) {
         return new PageResult<>(ResultCode.SUCCESS.getCode(), "success", true, data, pageNum, pageSize, total);
     }
 
-    public static <T> PageResult<T> error(Integer code, String msg, List<T> data, Long total, Integer pageNum, Integer pageSize) {
+    public static <T> PageResult<T> error(Integer code, String msg, List<T> data, Long total, Long pageNum, Long pageSize) {
         return new PageResult<>(code, msg, true, data, pageNum, pageSize, total);
     }
 
-    public static <T> PageResult<T> pageResult(Integer code, String msg, Boolean success, List<T> data, Long total, Integer pageNum, Integer pageSize) {
+    public static <T> PageResult<T> pageResult(Integer code, String msg, Boolean success, List<T> data, Long total, Long pageNum, Long pageSize) {
         return new PageResult<>(code, msg, success, data, pageNum, pageSize, total);
     }
 }
