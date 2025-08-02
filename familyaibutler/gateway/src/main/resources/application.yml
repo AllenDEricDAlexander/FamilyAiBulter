@@ -25,6 +25,10 @@ logging:
   config: classpath:log/logback-spring.xml
   level:
     root: info
+    org:
+      springframework:
+        cloud:
+          gateway: info
 
 
 knife4j:
