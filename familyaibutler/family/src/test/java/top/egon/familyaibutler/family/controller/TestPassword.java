@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
  */
 @SpringBootTest(classes = FamilyApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class TestPassword {
+class TestPassword {
 
     private static final String PASSWORD_TRUE_REGEX = "^[a-zA-Z0-9!@#$%^&*()-_=+<>?]+$";
     private static final String PASSWORD_FALSE_REGEX = "^[a-zA-Z0-9]+$";

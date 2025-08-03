@@ -1,10 +1,17 @@
 package top.egon.familyaibutler.family.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.nulabinc.zxcvbn.Strength;
+import com.nulabinc.zxcvbn.Zxcvbn;
 import org.springframework.stereotype.Service;
 import top.egon.familyaibutler.family.mapper.PasswordViewMapper;
 import top.egon.familyaibutler.family.po.PasswordViewPO;
 import top.egon.familyaibutler.family.service.PasswordViewService;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @BelongsProject: familyaibutler
@@ -17,5 +24,80 @@ import top.egon.familyaibutler.family.service.PasswordViewService;
 @Service("passwordViewService")
 public class PasswordViewServiceImpl extends ServiceImpl<PasswordViewMapper, PasswordViewPO> implements PasswordViewService {
 
+    // 密码强度检测工具
+    private static final Zxcvbn ZXCVBN = new Zxcvbn();
+    // 敏感词
+    private static final List<String> SENSITIVE_WORDS = Arrays.asList("family", "ai", "butler");
+    // 键盘连续检测
+    private static final String KEYBOARD_SEQUENCE = "(q[1w]|w[2e]|e[3r]|r[4t]|t[5y]|y[6u]|u[7i]|i[8o]|o[9p]|p[0]){3,}";
+    // 最小评分要求（根据业务调整，建议≥3）
+    private static final int MIN_SCORE = 3;
+    // 最小密码长度
+    private static final int MIN_LENGTH = 8;
+
+    /**
+     * @description: 综合验证密码强度（ZXCVBN+自定义补漏）
+     * @author: atluofu
+     * @date: 2025/8/3 10:40
+     * @param: password
+     * @return: boolean
+     **/
+    public static boolean isValidPassword(String password) {
+        if (password == null || password.length() < MIN_LENGTH) {
+            return false;
+        }
+        Strength result = ZXCVBN.measure(password, SENSITIVE_WORDS);
+        if (result.getScore() < MIN_SCORE) {
+            return false;
+        }
+        return !hasContinuousSequence(password) && !hasRepeatedChars(password) && !hasMixedSpatialPattern(password);
+    }
+
+    /**
+     * @description: 检测4位以上连续字符（数字或字母）
+     * @author: atluofu
+     * @date: 2025/8/3 10:39
+     * @param: password
+     * @return: boolean
+     **/
+    private static boolean hasContinuousSequence(String password) {
+        // 数字连续（如1234）或字母连续（如abcd）
+        Pattern pattern = Pattern.compile("(\\d{4,})|([a-zA-Z]{4,})");
+        Matcher matcher = pattern.matcher(password);
+        if (matcher.find()) {
+            String seq = matcher.group();
+            // 验证是否真的连续（如1234是连续，1245不是）
+            for (int i = 1; i < seq.length(); i++) {
+                if (seq.charAt(i) - seq.charAt(i - 1) != 1) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @description: 检测4位以上重复字符
+     * @author: atluofu
+     * @date: 2025/8/3 10:38
+     * @parm: password
+     * @retrn: boolean
+     **/
+    private static boolean hasRepeatedChars(String password) {
+        Pattern pattern = Pattern.compile("(.)\\1{3,}");
+        return pattern.matcher(password).find();
+    }
+
+    /**
+     * @description: 检测键盘混合连续模式（如q1w2e3）
+     * @author: atluofu
+     * @date: 2025/8/3 10:37
+     * @param: password
+     * @return: boolean
+     **/
+    private static boolean hasMixedSpatialPattern(String password) {
+        return Pattern.compile(KEYBOARD_SEQUENCE, Pattern.CASE_INSENSITIVE).matcher(password).find();
+    }
 }
 

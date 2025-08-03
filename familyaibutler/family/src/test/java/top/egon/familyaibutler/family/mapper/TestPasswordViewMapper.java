@@ -1,8 +1,11 @@
-package top.egon.familyaibutler.family.repository.mapper;
+package top.egon.familyaibutler.family.mapper;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import top.egon.familyaibutler.family.mapper.PasswordViewMapper;
 
 /**
  * @BelongsProject: familyaibutler
@@ -14,14 +17,16 @@ import org.springframework.boot.test.context.SpringBootTest;
  * @Version: 1.0
  */
 @SpringBootTest
-public class TestPasswordViewMapper {
-    @Autowired
+class TestPasswordViewMapper {
+    @Mock
     private PasswordViewMapper passwordViewMapper;
 
     @Test
     void testSelect() {
+        Long count = 1L;
+        Mockito.when(passwordViewMapper.selectCount(null)).thenReturn(count);
         Long l = passwordViewMapper.selectCount(null);
-        System.out.println(l);
+        Assertions.assertEquals(count,l);
     }
 
 }

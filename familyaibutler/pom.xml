@@ -89,6 +89,11 @@
                 <artifactId>postgresql</artifactId>
                 <version>42.7.7</version>
             </dependency>
+            <dependency>
+                <groupId>com.nulab-inc</groupId>
+                <artifactId>zxcvbn</artifactId>
+                <version>1.9.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

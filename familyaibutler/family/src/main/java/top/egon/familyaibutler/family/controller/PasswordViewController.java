@@ -89,24 +89,22 @@ public class PasswordViewController {
     }
 
     /**
-     * 新增数据
-     *
-     * @param passwordView 实体对象
-     * @return 新增结果
-     */
-    @PostMapping
-    public Result<Boolean> insert(@RequestBody PasswordViewPO passwordView) {
-        return Result.success(this.passwordViewService.save(passwordView));
-    }
-
-    /**
      * 修改数据
      *
-     * @param passwordView 实体对象
+     * @param passwordViewDTO 实体对象
      * @return 修改结果
      */
     @PutMapping
-    public Result<Boolean> update(@RequestBody PasswordViewPO passwordView) {
+    public Result<Boolean> update(@RequestBody PasswordViewDTO passwordViewDTO) {
+        PasswordViewPO passwordView = PasswordViewPO.builder()
+                .name(passwordViewDTO.getName())
+                .password(passwordViewDTO.getPassword())
+                .description(passwordViewDTO.getDescription())
+                .accountNumber(passwordViewDTO.getAccountNumber())
+                .websit(passwordViewDTO.getWebsit())
+                .likeStatus(passwordViewDTO.isLikeStatus())
+                .category(passwordViewDTO.getCategory())
+                .build();
         return Result.success(this.passwordViewService.updateById(passwordView));
     }
 
