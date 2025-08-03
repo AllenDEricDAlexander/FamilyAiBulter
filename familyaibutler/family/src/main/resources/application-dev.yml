@@ -7,3 +7,7 @@ spring:
     username: postgres
     password: mqa010225@gmail
     driver-class-name: org.postgresql.Driver
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
