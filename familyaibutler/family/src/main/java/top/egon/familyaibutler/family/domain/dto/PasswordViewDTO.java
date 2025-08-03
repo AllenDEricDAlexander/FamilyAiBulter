@@ -32,6 +32,8 @@ import java.time.LocalDateTime;
 public class PasswordViewDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 9146111814279753262L;
+    @Schema(title = "name", name = "name", defaultValue = "1", type = "String")
+    private Long id;
     @Schema(title = "name", name = "name", defaultValue = "test", type = "String")
     private String name;
     @Schema(title = "password", name = "password", defaultValue = "Test123*.+", type = "String")

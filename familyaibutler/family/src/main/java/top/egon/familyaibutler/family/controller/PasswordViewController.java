@@ -58,8 +58,9 @@ public class PasswordViewController {
 
     @Operation(summary = "获取账号密码列表", description = "获取账号密码列表",
             parameters = {
-                    @Parameter(name = "pageNum", description = "页码", in = ParameterIn.DEFAULT, example = "1"),
-                    @Parameter(name = "pageSize", description = "页大小", in = ParameterIn.DEFAULT, example = "10")
+                    @Parameter(name = "pageNum", description = "页码", in = ParameterIn.PATH, example = "1"),
+                    @Parameter(name = "pageSize", description = "页大小", in = ParameterIn.PATH, example = "10"),
+                    @Parameter(name = "passwordView", description = "查询条件", in = ParameterIn.PATH, example = "*")
             },
             responses = {
                     @ApiResponse(description = "返回一个字符串", responseCode = "10000", content = @Content(schema = @Schema(implementation = Result.class, description = "账号密码列表", name = "账号密码列表", title = "账号密码列表", example = "List<PasswordView>")))
@@ -68,7 +69,7 @@ public class PasswordViewController {
     @GetMapping(value = {"/password/list/{pageNum}/{pageSize}", "/password/list"})
     public PageResult<List<PasswordViewPO>> selectAll(@PathVariable(value = "pageNum", required = false) @Range(min = 1) Integer pageNum,
                                                       @PathVariable(value = "pageSize", required = false) @Range(min = 1) Integer pageSize
-            , @RequestBody PasswordViewPO passwordView) {
+            , @RequestBody(required = false) PasswordViewPO passwordView) {
         int realPageNum = 1;
         int realPageSize = 10;
         if (ObjectUtils.isNotEmpty(pageNum)) {
@@ -100,16 +101,18 @@ public class PasswordViewController {
      */
     @PutMapping
     public Result<Boolean> update(@RequestBody PasswordViewDTO passwordViewDTO) {
-        PasswordViewPO passwordView = PasswordViewPO.builder()
-                .name(passwordViewDTO.getName())
-                .password(passwordViewDTO.getPassword())
-                .description(passwordViewDTO.getDescription())
-                .accountNumber(passwordViewDTO.getAccountNumber())
-                .websit(passwordViewDTO.getWebsit())
-                .likeStatus(passwordViewDTO.isLikeStatus())
-                .category(passwordViewDTO.getCategory())
-                .build();
-        return Result.success(this.passwordViewService.updateById(passwordView));
+        PasswordViewPO byId = this.passwordViewService.getById(passwordViewDTO.getId());
+        if (byId == null) {
+            return Result.fail(10001, "未找到该数据", null);
+        }
+        byId.setName(passwordViewDTO.getName())
+                .setPassword(passwordViewDTO.getPassword())
+                .setDescription(passwordViewDTO.getDescription())
+                .setAccountNumber(passwordViewDTO.getAccountNumber())
+                .setWebsit(passwordViewDTO.getWebsit())
+                .setLikeStatus(passwordViewDTO.isLikeStatus())
+                .setCategory(passwordViewDTO.getCategory());
+        return Result.success(this.passwordViewService.updateById(byId));
     }
 
     /**
