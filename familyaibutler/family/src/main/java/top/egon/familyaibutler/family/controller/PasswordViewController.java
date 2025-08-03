@@ -1,5 +1,7 @@
 package top.egon.familyaibutler.family.controller;
 
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,16 +15,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import top.egon.familyaibutler.common.pojo.PageResult;
 import top.egon.familyaibutler.common.pojo.Result;
 import top.egon.familyaibutler.family.domain.dto.PasswordViewDTO;
-import top.egon.familyaibutler.family.domain.pojo.PasswordView;
+import top.egon.familyaibutler.family.po.PasswordViewPO;
 import top.egon.familyaibutler.family.service.PasswordViewService;
 
 import java.security.SecureRandom;
@@ -31,11 +36,11 @@ import java.util.List;
 
 /**
  * @BelongsProject: familyaibutler
- * @BelongsPackage: top.familyaibutler.family.controller
- * @ClassName: PasswordController
+ * @BelongsPackage: top.egon.familyaibutler.family.domain.pojo
+ * @ClassName: PasswordView
  * @Author: atluofu
- * @CreateTime: 2025Year-07Month-31Day-22:03
- * @Description: 密码管理器访问层
+ * @CreateTime: 2025Year-08Month-02Day-21:08
+ * @Description: password view pojo
  * @Version: 1.0
  */
 @RestController
@@ -44,8 +49,7 @@ import java.util.List;
 @Tag(name = "密码管理相关接口")
 @Slf4j
 @RequiredArgsConstructor
-public class PasswordController {
-
+public class PasswordViewController {
     private static final String UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final String LOWERCASE = "abcdefghijklmnopqrstuvwxyz";
     private static final String DIGITS = "0123456789";
@@ -55,13 +59,13 @@ public class PasswordController {
 
     private final PasswordViewService passwordViewService;
 
-
     @Operation(summary = "获取账号密码列表", description = "获取账号密码列表",
             responses = {@ApiResponse(description = "返回一个字符串", responseCode = "10000",
                     content = @Content(schema = @Schema(implementation = Result.class, description = "账号密码列表", name = "账号密码列表", title = "账号密码列表", example = "List<PasswordView>")))})
     @GetMapping(value = {"/password/list/{pageNum}/{pageSize}", "/password/list"})
-    public PageResult<List<PasswordView>> list(@PathVariable(value = "pageNum", required = false) @Range(min = 1) Integer pageNum,
-                                               @PathVariable(value = "pageSize", required = false) @Range(min = 1) Integer pageSize) {
+    public PageResult<List<PasswordViewPO>> selectAll(@PathVariable(value = "pageNum", required = false) @Range(min = 1) Integer pageNum,
+                                                      @PathVariable(value = "pageSize", required = false) @Range(min = 1) Integer pageSize
+            , @RequestBody PasswordViewPO passwordView) {
         int realPageNum = 1;
         int realPageSize = 10;
         if (ObjectUtils.isNotEmpty(pageNum)) {
@@ -70,8 +74,52 @@ public class PasswordController {
         if (ObjectUtils.isNotEmpty(pageSize)) {
             realPageSize = pageSize;
         }
-        Page<PasswordView> page = passwordViewService.page(new Page<>(realPageNum, realPageSize));
+        Page<PasswordViewPO> page = this.passwordViewService.page(new Page<>(realPageNum, realPageSize), new QueryWrapper<>(passwordView));
         return PageResult.success(Collections.singletonList(page.getRecords()), page.getTotal(), page.getCurrent(), page.getSize());
+    }
+
+    /**
+     * 通过主键查询单条数据
+     *
+     * @param id 主键
+     * @return 单条数据
+     */
+    @GetMapping("{id}")
+    public Result<PasswordViewPO> selectOne(@PathVariable Long id) {
+        return Result.success(this.passwordViewService.getById(id));
+    }
+
+    /**
+     * 新增数据
+     *
+     * @param passwordView 实体对象
+     * @return 新增结果
+     */
+    @PostMapping
+    public Result<Boolean> insert(@RequestBody PasswordViewPO passwordView) {
+        return Result.success(this.passwordViewService.save(passwordView));
+    }
+
+    /**
+     * 修改数据
+     *
+     * @param passwordView 实体对象
+     * @return 修改结果
+     */
+    @PutMapping
+    public Result<Boolean> update(@RequestBody PasswordViewPO passwordView) {
+        return Result.success(this.passwordViewService.updateById(passwordView));
+    }
+
+    /**
+     * 删除数据
+     *
+     * @param idList 主键结合
+     * @return 删除结果
+     */
+    @DeleteMapping
+    public Result<Boolean> delete(@RequestParam("idList") List<Long> idList) {
+        return Result.success(this.passwordViewService.removeByIds(idList));
     }
 
     @Operation(summary = "添加一个账号密码", description = "添加一个账号密码", parameters = {
@@ -80,7 +128,7 @@ public class PasswordController {
             content = @Content(schema = @Schema(implementation = Result.class, description = "添加结果", name = "添加结果", title = "添加结果", example = "添加成功"))),})
     @PostMapping("/password/add")
     public Result<String> add(@RequestBody PasswordViewDTO passwordViewDTO) {
-        PasswordView passwordView = PasswordView.builder()
+        PasswordViewPO passwordView = PasswordViewPO.builder()
                 .name(passwordViewDTO.getName())
                 .password(passwordViewDTO.getPassword())
                 .description(passwordViewDTO.getDescription())
@@ -167,3 +215,4 @@ public class PasswordController {
         return shuffled.toString();
     }
 }
+

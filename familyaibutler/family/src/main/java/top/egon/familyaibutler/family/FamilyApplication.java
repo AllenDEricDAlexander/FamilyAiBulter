@@ -22,7 +22,7 @@ import java.net.UnknownHostException;
  */
 @Slf4j
 @SpringBootApplication
-@MapperScan("top.egon.familyaibutler.family.repository.mapper")
+@MapperScan("top.egon.familyaibutler.family.mapper")
 @ComponentScan(basePackages = {"top.egon.familyaibutler.family", "top.egon.familyaibutler.common"})
 public class FamilyApplication {
 

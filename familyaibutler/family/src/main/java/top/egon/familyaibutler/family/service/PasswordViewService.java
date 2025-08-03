@@ -1,16 +1,17 @@
 package top.egon.familyaibutler.family.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import top.egon.familyaibutler.family.domain.pojo.PasswordView;
+import top.egon.familyaibutler.family.po.PasswordViewPO;
 
 /**
  * @BelongsProject: familyaibutler
- * @BelongsPackage: top.egon.familyaibutler.family.service
- * @ClassName: PasswordViewService
+ * @BelongsPackage: top.egon.familyaibutler.family
  * @Author: atluofu
- * @CreateTime: 2025Year-08Month-02Day-21:45
- * @Description: PasswordViewService
+ * @CreateTime: 2025-08-03 09:41:48
+ * @Description: (PasswordView)表服务接口
  * @Version: 1.0
  */
-public interface PasswordViewService extends IService<PasswordView> {
+public interface PasswordViewService extends IService<PasswordViewPO> {
+
 }
+
