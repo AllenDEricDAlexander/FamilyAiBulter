@@ -29,6 +29,16 @@ spring:
     active: dev
   application:
     name: familyBaseModel
+  datasource:
+    hikari:
+      connection-timeout: 2000
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 200000
+      auto-commit: true
+      max-lifetime: 1800000
+      connection-test-query: select 1
+      pool-name: FamilyHikariCP
 
 mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml
