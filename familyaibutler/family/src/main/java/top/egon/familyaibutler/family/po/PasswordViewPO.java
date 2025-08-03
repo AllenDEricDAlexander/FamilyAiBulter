@@ -1,6 +1,7 @@
 package top.egon.familyaibutler.family.po;
 
 
+import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -18,10 +19,10 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.With;
 import lombok.experimental.Accessors;
+import top.egon.familyaibutler.family.enums.PasswordCategoryEnum;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -83,7 +84,7 @@ public class PasswordViewPO extends Model<PasswordViewPO> implements Serializabl
     /**
      * category
      */
-    private String category;
+    private PasswordCategoryEnum category;
 
     /**
      * latested view time

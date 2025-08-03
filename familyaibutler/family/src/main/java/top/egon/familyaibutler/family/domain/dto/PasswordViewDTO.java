@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
 import lombok.experimental.Accessors;
+import top.egon.familyaibutler.family.enums.PasswordCategoryEnum;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -47,10 +48,10 @@ public class PasswordViewDTO implements Serializable {
     @Schema(title = "websit", name = "websit", defaultValue = "www.baidu.com", type = "String")
     @NotNull
     private String websit;
-    @Schema(title = "likeStatus", name = "likeStatus", defaultValue = "true", type = "bool")
+    @Schema(title = "likeStatus", name = "likeStatus", defaultValue = "false", type = "bool")
     private boolean likeStatus;
-    @Schema(title = "category", name = "category", defaultValue = "web", type = "String")
-    private String category;
+    @Schema(title = "category", name = "category", defaultValue = "1", type = "int")
+    private PasswordCategoryEnum category;
     @Schema(title = "lastViewTime", name = "lastViewTime", defaultValue = "2025-08-01 20:30:40", type = "String", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     private LocalDateTime lastViewTime;
 }

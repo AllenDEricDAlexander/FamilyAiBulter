@@ -27,6 +27,7 @@ import top.egon.familyaibutler.common.pojo.PageResult;
 import top.egon.familyaibutler.common.pojo.Result;
 import top.egon.familyaibutler.family.domain.dto.PasswordViewDTO;
 import top.egon.familyaibutler.family.domain.dto.StrengthDTO;
+import top.egon.familyaibutler.family.enums.PasswordCategoryEnum;
 import top.egon.familyaibutler.family.po.PasswordViewPO;
 import top.egon.familyaibutler.family.service.impl.PasswordViewServiceImpl;
 

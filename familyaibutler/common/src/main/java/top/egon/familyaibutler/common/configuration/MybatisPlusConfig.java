@@ -1,10 +1,12 @@
 package top.egon.familyaibutler.common.configuration;
 
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 /**
  * @BelongsProject: familyaibutler
@@ -25,4 +27,13 @@ public class MybatisPlusConfig {
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor());
         return interceptor;
     }
+
+    @Bean
+    @Profile({"dev", "test"})
+    public MybatisPlusInterceptor blockAttackInnerInterceptor() {
+        MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+        interceptor.addInnerInterceptor(new BlockAttackInnerInterceptor());
+        return interceptor;
+    }
+
 }
