@@ -83,7 +83,7 @@ public class PasswordViewPO extends Model<PasswordViewPO> implements Serializabl
     /**
      * latested view time
      */
-    private LocalDateTime lastViewTime;
+    private Date lastViewTime;
 
     /**
      * logic delete

@@ -26,10 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
 import top.egon.familyaibutler.common.pojo.PageResult;
 import top.egon.familyaibutler.common.pojo.Result;
 import top.egon.familyaibutler.family.domain.dto.PasswordViewDTO;
+import top.egon.familyaibutler.family.domain.dto.StrengthDTO;
 import top.egon.familyaibutler.family.po.PasswordViewPO;
-import top.egon.familyaibutler.family.service.PasswordViewService;
+import top.egon.familyaibutler.family.service.impl.PasswordViewServiceImpl;
 
-import java.security.SecureRandom;
 import java.util.Collections;
 import java.util.List;
 
@@ -49,18 +49,22 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class PasswordViewController {
-    private static final String UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    private static final String LOWERCASE = "abcdefghijklmnopqrstuvwxyz";
-    private static final String DIGITS = "0123456789";
+
     private static final String SPECIAL_CHARACTERS = "!@#$%^&*()-_=+<>?";
 
     private static final int PASSWORD_LENGTH = 12;
 
-    private final PasswordViewService passwordViewService;
+    private final PasswordViewServiceImpl passwordViewService;
 
     @Operation(summary = "获取账号密码列表", description = "获取账号密码列表",
-            responses = {@ApiResponse(description = "返回一个字符串", responseCode = "10000",
-                    content = @Content(schema = @Schema(implementation = Result.class, description = "账号密码列表", name = "账号密码列表", title = "账号密码列表", example = "List<PasswordView>")))})
+            parameters = {
+                    @Parameter(name = "pageNum", description = "页码", in = ParameterIn.DEFAULT, example = "1"),
+                    @Parameter(name = "pageSize", description = "页大小", in = ParameterIn.DEFAULT, example = "10")
+            },
+            responses = {
+                    @ApiResponse(description = "返回一个字符串", responseCode = "10000", content = @Content(schema = @Schema(implementation = Result.class, description = "账号密码列表", name = "账号密码列表", title = "账号密码列表", example = "List<PasswordView>")))
+            }
+    )
     @GetMapping(value = {"/password/list/{pageNum}/{pageSize}", "/password/list"})
     public PageResult<List<PasswordViewPO>> selectAll(@PathVariable(value = "pageNum", required = false) @Range(min = 1) Integer pageNum,
                                                       @PathVariable(value = "pageSize", required = false) @Range(min = 1) Integer pageSize
@@ -119,10 +123,14 @@ public class PasswordViewController {
         return Result.success(this.passwordViewService.removeByIds(idList));
     }
 
-    @Operation(summary = "添加一个账号密码", description = "添加一个账号密码", parameters = {
-            @Parameter(name = "passwordView", description = "passwordView", in = ParameterIn.PATH, required = true, example = "PasswordView")
-    }, responses = {@ApiResponse(description = "返回是否添加成功", responseCode = "10000",
-            content = @Content(schema = @Schema(implementation = Result.class, description = "添加结果", name = "添加结果", title = "添加结果", example = "添加成功"))),})
+    @Operation(summary = "添加一个账号密码", description = "添加一个账号密码",
+            parameters = {
+                    @Parameter(name = "passwordView", description = "passwordView", in = ParameterIn.DEFAULT, required = true, example = "PasswordView")
+            },
+            responses = {
+                    @ApiResponse(description = "返回是否添加成功", responseCode = "10000", content = @Content(schema = @Schema(implementation = Result.class, description = "添加结果", name = "添加结果", title = "添加结果", example = "添加成功")))
+            }
+    )
     @PostMapping("/password/add")
     public Result<String> add(@RequestBody PasswordViewDTO passwordViewDTO) {
         PasswordViewPO passwordView = PasswordViewPO.builder()
@@ -139,12 +147,16 @@ public class PasswordViewController {
     }
 
 
-    @Operation(summary = "生成一个随机密码", description = "生成一个随机密码", parameters = {
-            @Parameter(name = "passwordLength", description = "passwordLength", in = ParameterIn.PATH, required = true, example = "16"),
-            @Parameter(name = "needSpecialCharacters", description = "needSpecialCharacters", in = ParameterIn.PATH, example = "true"),
-            @Parameter(name = "specialCharacters", description = "specialCharacters", in = ParameterIn.PATH, example = "!@#$%^&*()-_=+<>?")
-    }, responses = {@ApiResponse(description = "返回一个字符串", responseCode = "10000",
-            content = @Content(schema = @Schema(implementation = Result.class, description = "随机密码", name = "随机密码", title = "随机密码", example = "W7%@pQJt16ZeN&2u"))),})
+    @Operation(summary = "生成一个随机密码", description = "生成一个随机密码",
+            parameters = {
+                    @Parameter(name = "passwordLength", description = "passwordLength", in = ParameterIn.PATH, required = true, example = "16"),
+                    @Parameter(name = "needSpecialCharacters", description = "needSpecialCharacters", in = ParameterIn.PATH, example = "true"),
+                    @Parameter(name = "specialCharacters", description = "specialCharacters", in = ParameterIn.PATH, example = "!@#$%^&*()-_=+<>?")
+            },
+            responses = {
+                    @ApiResponse(description = "返回一个字符串", responseCode = "10000", content = @Content(schema = @Schema(implementation = Result.class, description = "随机密码", name = "随机密码", title = "随机密码", example = "W7%@pQJt16ZeN&2u")))
+            }
+    )
     @GetMapping(value = {"/generate/{passwordLength}", "/generate/{passwordLength}/{needSpecialCharacters}", "/generate/{passwordLength}/{needSpecialCharacters}/{specialCharacters}"})
     public Result<String> generatePassword(@PathVariable(value = "passwordLength") @Range(min = 12, max = 24, message = "密码生成长度在12-24之间") Integer passwordLength,
                                            @PathVariable(value = "needSpecialCharacters", required = false) Boolean needSpecialCharacters,
@@ -161,55 +173,34 @@ public class PasswordViewController {
         if (ObjectUtils.isNotEmpty(specialCharacters)) {
             realSpecialCharacters = specialCharacters;
         }
-        return Result.success(generatePassword(realLength, isRealNeed, realSpecialCharacters));
+        return Result.success(PasswordViewServiceImpl.generatePassword(realLength, isRealNeed, realSpecialCharacters));
     }
 
-    /**
-     * @description: 密码生成
-     * @author: atluofu
-     * @date: 2025/7/31 22:09
-     * @param:
-     * @return:
-     **/
-    public static String generatePassword(int length, boolean needSpecialCharacters, String realSpecialCharacters) {
-        StringBuilder password = new StringBuilder(length);
-        SecureRandom random = new SecureRandom();
-        // 确保密码包含至少一个大写字母、小写字母、数字和特殊字符
-        password.append(UPPERCASE.charAt(random.nextInt(UPPERCASE.length())));
-        password.append(LOWERCASE.charAt(random.nextInt(LOWERCASE.length())));
-        password.append(DIGITS.charAt(random.nextInt(DIGITS.length())));
-        String allCharacters = null;
-        if (needSpecialCharacters) {
-            password.append(realSpecialCharacters.charAt(random.nextInt(realSpecialCharacters.length())));
-            allCharacters = UPPERCASE + LOWERCASE + DIGITS + realSpecialCharacters;
-        } else {
-            password.append(DIGITS.charAt(random.nextInt(DIGITS.length())));
-            allCharacters = UPPERCASE + LOWERCASE + DIGITS;
-        }
-        // 随机选择剩余的字符
-        for (int i = 4; i < length; i++) {
-            password.append(allCharacters.charAt(random.nextInt(allCharacters.length())));
-        }
-        return shuffleString(password.toString());
+    @Operation(summary = "检查密码强度", description = "检查密码强度",
+            parameters = {
+                    @Parameter(name = "password", description = "password", in = ParameterIn.PATH, required = true, example = "xY7!pQ2@zR5#")
+            },
+            responses = {
+                    @ApiResponse(description = "返回一个密码强度对象", responseCode = "10000", content = @Content(schema = @Schema(implementation = Result.class, description = "密码强度", name = "密码强度", title = "密码强度", example = "*")))
+            }
+    )
+    @GetMapping("/checkStrength/{password}")
+    public Result<StrengthDTO> checkPassword(@PathVariable String password) {
+        return Result.success(PasswordViewServiceImpl.checkStrength(password));
     }
 
-    /**
-     * @description: 打乱密码顺序
-     * @author: atluofu
-     * @date: 2025/7/31 22:08
-     * @parm: a
-     * @retrn: a
-     **/
-    private static String shuffleString(String input) {
-        StringBuilder shuffled = new StringBuilder(input);
-        SecureRandom random = new SecureRandom();
-        for (int i = 0; i < shuffled.length(); i++) {
-            int j = random.nextInt(shuffled.length());
-            char temp = shuffled.charAt(i);
-            shuffled.setCharAt(i, shuffled.charAt(j));
-            shuffled.setCharAt(j, temp);
-        }
-        return shuffled.toString();
+    @Operation(summary = "检查密码强度", description = "检查密码强度",
+            parameters = {
+                    @Parameter(name = "password", description = "password", in = ParameterIn.PATH, required = true, example = "xY7!pQ2@zR5#")
+            },
+            responses = {
+                    @ApiResponse(description = "返回一个密码强度对象", responseCode = "10000", content = @Content(schema = @Schema(implementation = Boolean.class, description = "密码强度", name = "密码强度", title = "密码强度", example = "true")))
+            }
+    )
+    @GetMapping("/checkValid/{password}")
+    public Result<Boolean> checkValid(@PathVariable String password) {
+        return Result.success(PasswordViewServiceImpl.isValidPassword(password));
     }
+
 }
 

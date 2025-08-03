@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.nulabinc.zxcvbn.Strength;
 import com.nulabinc.zxcvbn.Zxcvbn;
 import org.springframework.stereotype.Service;
+import top.egon.familyaibutler.family.domain.dto.StrengthDTO;
 import top.egon.familyaibutler.family.mapper.PasswordViewMapper;
 import top.egon.familyaibutler.family.po.PasswordViewPO;
 import top.egon.familyaibutler.family.service.PasswordViewService;
 
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -34,6 +36,28 @@ public class PasswordViewServiceImpl extends ServiceImpl<PasswordViewMapper, Pas
     private static final int MIN_SCORE = 3;
     // 最小密码长度
     private static final int MIN_LENGTH = 8;
+
+    private static final String UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String LOWERCASE = "abcdefghijklmnopqrstuvwxyz";
+    private static final String DIGITS = "0123456789";
+
+
+    /**
+     * @description: 校验密码强度信息
+     * @author: atluofu
+     * @date: 2025/8/3 12:22
+     * @param: password
+     * @return: Strength
+     **/
+    public static StrengthDTO checkStrength(String password) {
+        Strength measure = ZXCVBN.measure(password);
+        return StrengthDTO.builder()
+                .crackTimeSeconds(measure.getCrackTimeSeconds())
+                .crackTimesDisplay(measure.getCrackTimesDisplay())
+                .score(measure.getScore())
+                .feedback(measure.getFeedback())
+                .build();
+    }
 
     /**
      * @description: 综合验证密码强度（ZXCVBN+自定义补漏）
@@ -98,6 +122,54 @@ public class PasswordViewServiceImpl extends ServiceImpl<PasswordViewMapper, Pas
      **/
     private static boolean hasMixedSpatialPattern(String password) {
         return Pattern.compile(KEYBOARD_SEQUENCE, Pattern.CASE_INSENSITIVE).matcher(password).find();
+    }
+
+    /**
+     * @description: 密码生成
+     * @author: atluofu
+     * @date: 2025/7/31 22:09
+     * @param:
+     * @return:
+     **/
+    public static String generatePassword(int length, boolean needSpecialCharacters, String realSpecialCharacters) {
+        StringBuilder password = new StringBuilder(length);
+        SecureRandom random = new SecureRandom();
+        // 确保密码包含至少一个大写字母、小写字母、数字和特殊字符
+        password.append(UPPERCASE.charAt(random.nextInt(UPPERCASE.length())));
+        password.append(LOWERCASE.charAt(random.nextInt(LOWERCASE.length())));
+        password.append(DIGITS.charAt(random.nextInt(DIGITS.length())));
+        String allCharacters = null;
+        if (needSpecialCharacters) {
+            password.append(realSpecialCharacters.charAt(random.nextInt(realSpecialCharacters.length())));
+            allCharacters = UPPERCASE + LOWERCASE + DIGITS + realSpecialCharacters;
+        } else {
+            password.append(DIGITS.charAt(random.nextInt(DIGITS.length())));
+            allCharacters = UPPERCASE + LOWERCASE + DIGITS;
+        }
+        // 随机选择剩余的字符
+        for (int i = 4; i < length; i++) {
+            password.append(allCharacters.charAt(random.nextInt(allCharacters.length())));
+        }
+        return shuffleString(password.toString());
+    }
+
+    /**
+     * @description: 打乱密码顺序
+     * @author: atluofu
+     * @date: 2025/7/31 22:08
+     * @parm: a
+     * @retrn: a
+     **/
+    private static String shuffleString(String input) {
+        StringBuilder shuffled = new StringBuilder(input);
+        SecureRandom random = new SecureRandom();
+        for (int i = 0; i < shuffled.length(); i++) {
+            int j = random.nextInt(shuffled.length());
+            char temp = shuffled.charAt(i);
+            shuffled.setCharAt(i, shuffled.charAt(j));
+            shuffled.setCharAt(j, temp);
+        }
+        return shuffled.toString();
     }
 }
 

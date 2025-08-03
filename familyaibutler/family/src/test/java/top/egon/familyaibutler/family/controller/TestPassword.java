@@ -4,6 +4,11 @@ import com.google.gson.Gson;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +19,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import top.egon.familyaibutler.common.pojo.Result;
 import top.egon.familyaibutler.family.FamilyApplication;
+import top.egon.familyaibutler.family.po.PasswordViewPO;
+import top.egon.familyaibutler.family.service.impl.PasswordViewServiceImpl;
 
 import java.util.Random;
 import java.util.regex.Pattern;
@@ -29,6 +36,7 @@ import java.util.regex.Pattern;
  */
 @SpringBootTest(classes = FamilyApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+@ExtendWith(MockitoExtension.class)
 class TestPassword {
 
     private static final String PASSWORD_TRUE_REGEX = "^[a-zA-Z0-9!@#$%^&*()-_=+<>?]+$";
@@ -36,6 +44,30 @@ class TestPassword {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @InjectMocks
+    private PasswordViewController passwordViewController;
+
+    @Mock
+    private PasswordViewServiceImpl passwordViewService;
+
+
+    @Test
+    void testSelectOne() throws Exception {
+        PasswordViewPO passwordViewPO1 = new PasswordViewPO();
+        Mockito.when(passwordViewService.getById(1L)).thenReturn(passwordViewPO1);
+        mockMvc.perform(MockMvcRequestBuilders.get("/password/1")
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(10000))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("success"))
+                .andExpect(result -> {
+                    Result data = new Gson().fromJson(result.getResponse().getContentAsString(), Result.class);
+                    Assertions.assertNotNull(data);
+                })
+                .andReturn();
+    }
 
     @Test
     @DisplayName("单个密码随机生成单元测试")

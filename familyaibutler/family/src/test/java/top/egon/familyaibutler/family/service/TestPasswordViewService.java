@@ -2,9 +2,14 @@ package top.egon.familyaibutler.family.service;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import top.egon.familyaibutler.family.mapper.PasswordViewMapper;
 import top.egon.familyaibutler.family.service.impl.PasswordViewServiceImpl;
 
 /**
@@ -17,10 +22,14 @@ import top.egon.familyaibutler.family.service.impl.PasswordViewServiceImpl;
  * @Version: 1.0
  */
 @SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class TestPasswordViewService {
 
-    @Mock
+    @InjectMocks
     private PasswordViewServiceImpl passwordViewService;
+
+    @Mock
+    private PasswordViewMapper passwordViewMapper;
 
     @Test
     void testPasswordStrength() {
@@ -33,7 +42,7 @@ class TestPasswordViewService {
 
     @Test
     void testPasswordBase() {
-        Mockito.when(passwordViewService.count()).thenReturn(1L);
+        Mockito.when(passwordViewMapper.selectCount(ArgumentMatchers.any())).thenReturn(1L);
         Assertions.assertEquals(1L, passwordViewService.count());
     }
 }

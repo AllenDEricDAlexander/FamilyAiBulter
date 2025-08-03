@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-import top.egon.familyaibutler.family.mapper.PasswordViewMapper;
 
 /**
  * @BelongsProject: familyaibutler
