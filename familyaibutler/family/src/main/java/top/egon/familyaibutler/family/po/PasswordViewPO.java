@@ -9,6 +9,8 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -86,6 +88,7 @@ public class PasswordViewPO extends Model<PasswordViewPO> implements Serializabl
     /**
      * latested view time
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastViewTime;
 
     /**
@@ -95,12 +98,15 @@ public class PasswordViewPO extends Model<PasswordViewPO> implements Serializabl
     private Boolean deleted;
 
     @TableField(fill = FieldFill.INSERT)
+    @JsonIgnore
     private Date createTime;
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
+    @JsonIgnore
     private Date updateTime;
 
     @Version
+    @JsonIgnore
     private Integer version;
 
     /**

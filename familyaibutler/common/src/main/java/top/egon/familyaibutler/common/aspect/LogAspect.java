@@ -1,9 +1,10 @@
 package top.egon.familyaibutler.common.aspect;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
+import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -30,7 +31,10 @@ import java.lang.reflect.Method;
 @Aspect
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class LogAspect {
+
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     @Pointcut("execution(public * top.egon..controller.*Controller.*(..))")
     public void controllerPointcut() {
@@ -38,7 +42,6 @@ public class LogAspect {
 
     @Around("controllerPointcut()")
     public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         MethodSignature ms = (MethodSignature) proceedingJoinPoint.getSignature();
         Method method = ms.getMethod();
         log.info("===============请求内容===============");
@@ -55,12 +58,12 @@ public class LogAspect {
             }
             arguments[i] = args[i];
         }
-        log.info("请求参数: {}", gson.toJson(arguments));
+        log.info("请求参数: {}", OBJECT_MAPPER.writeValueAsString(arguments));
         log.info("===============请求内容===============");
         long startTime = System.currentTimeMillis();
         Object result = proceedingJoinPoint.proceed();
         log.info("===============返回内容===============");
-        log.info("返回参数: {}", gson.toJson(result));
+        log.info("返回参数: {}", OBJECT_MAPPER.writeValueAsString(result));
         log.info("------------- 结束 耗时：{} ms -------------", System.currentTimeMillis() - startTime);
         return result;
     }

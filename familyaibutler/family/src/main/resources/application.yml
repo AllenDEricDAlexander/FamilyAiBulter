@@ -39,6 +39,15 @@ spring:
       max-lifetime: 1800000
       connection-test-query: select 1
       pool-name: FamilyHikariCP
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    default-property-inclusion: always
+    deserialization:
+      fail-on-unknown-properties: false
+    serialization:
+      indent-output: true
+
+
 
 mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml

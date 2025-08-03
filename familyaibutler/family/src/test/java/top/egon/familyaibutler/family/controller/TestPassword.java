@@ -1,6 +1,6 @@
 package top.egon.familyaibutler.family.controller;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -63,7 +63,8 @@ class TestPassword {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(10000))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("success"))
                 .andExpect(result -> {
-                    Result data = new Gson().fromJson(result.getResponse().getContentAsString(), Result.class);
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    Result data = objectMapper.readValue(result.getResponse().getContentAsString(), Result.class);
                     Assertions.assertNotNull(data);
                 })
                 .andReturn();
@@ -73,6 +74,7 @@ class TestPassword {
     @DisplayName("单个密码随机生成单元测试")
     void testPassword() throws Exception {
         int length = new Random().nextInt(16, 24);
+        ObjectMapper objectMapper = new ObjectMapper();
         mockMvc.perform(MockMvcRequestBuilders.get("/password/generate/" + length)
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -81,7 +83,7 @@ class TestPassword {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("success"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.success").value(true))
                 .andExpect(result -> {
-                    String data = new Gson().fromJson(result.getResponse().getContentAsString(), Result.class).getData().toString();
+                    String data = objectMapper.readValue(result.getResponse().getContentAsString(), Result.class).getData().toString();
                     Assertions.assertEquals(length, data.length());
                     Assertions.assertTrue(Pattern.matches(PASSWORD_TRUE_REGEX, data));
                 })
@@ -94,7 +96,7 @@ class TestPassword {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("success"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.success").value(true))
                 .andExpect(result -> {
-                    String data = new Gson().fromJson(result.getResponse().getContentAsString(), Result.class).getData().toString();
+                    String data = objectMapper.readValue(result.getResponse().getContentAsString(), Result.class).getData().toString();
                     Assertions.assertEquals(length, data.length());
                     Assertions.assertTrue(Pattern.matches(PASSWORD_FALSE_REGEX, data));
                 })

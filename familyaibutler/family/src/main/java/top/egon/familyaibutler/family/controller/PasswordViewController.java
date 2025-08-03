@@ -69,7 +69,7 @@ public class PasswordViewController {
     @GetMapping(value = {"/password/list/{pageNum}/{pageSize}", "/password/list"})
     public PageResult<List<PasswordViewPO>> selectAll(@PathVariable(value = "pageNum", required = false) @Range(min = 1) Integer pageNum,
                                                       @PathVariable(value = "pageSize", required = false) @Range(min = 1) Integer pageSize
-            , @RequestBody(required = false) PasswordViewPO passwordView) {
+            , @RequestBody(required = false) PasswordViewDTO passwordViewDTO) {
         int realPageNum = 1;
         int realPageSize = 10;
         if (ObjectUtils.isNotEmpty(pageNum)) {
@@ -78,6 +78,17 @@ public class PasswordViewController {
         if (ObjectUtils.isNotEmpty(pageSize)) {
             realPageSize = pageSize;
         }
+        PasswordViewPO.PasswordViewPOBuilder builder = PasswordViewPO.builder();
+        if (ObjectUtils.isNotEmpty(passwordViewDTO)) {
+            builder.name(passwordViewDTO.getName())
+                    .password(passwordViewDTO.getPassword())
+                    .description(passwordViewDTO.getDescription())
+                    .accountNumber(passwordViewDTO.getAccountNumber())
+                    .websit(passwordViewDTO.getWebsit())
+                    .likeStatus(passwordViewDTO.isLikeStatus())
+                    .category(passwordViewDTO.getCategory());
+        }
+        PasswordViewPO passwordView = builder.build();
         Page<PasswordViewPO> page = this.passwordViewService.page(new Page<>(realPageNum, realPageSize), new QueryWrapper<>(passwordView));
         return PageResult.success(Collections.singletonList(page.getRecords()), page.getTotal(), page.getCurrent(), page.getSize());
     }
