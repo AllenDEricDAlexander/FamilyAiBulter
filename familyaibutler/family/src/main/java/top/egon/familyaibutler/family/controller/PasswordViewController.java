@@ -27,8 +27,8 @@ import top.egon.familyaibutler.common.pojo.PageResult;
 import top.egon.familyaibutler.common.pojo.Result;
 import top.egon.familyaibutler.family.domain.dto.PasswordViewDTO;
 import top.egon.familyaibutler.family.domain.dto.StrengthDTO;
-import top.egon.familyaibutler.family.enums.PasswordCategoryEnum;
 import top.egon.familyaibutler.family.po.PasswordViewPO;
+import top.egon.familyaibutler.family.service.PasswordViewService;
 import top.egon.familyaibutler.family.service.impl.PasswordViewServiceImpl;
 
 import java.util.Collections;
@@ -55,7 +55,7 @@ public class PasswordViewController {
 
     private static final int PASSWORD_LENGTH = 12;
 
-    private final PasswordViewServiceImpl passwordViewService;
+    private final PasswordViewService passwordViewService;
 
     @Operation(summary = "获取账号密码列表", description = "获取账号密码列表",
             parameters = {
@@ -101,6 +101,7 @@ public class PasswordViewController {
      * @return 单条数据
      */
     @GetMapping("{id}")
+    @Operation(summary = "通过主键查询单条数据", description = "通过主键查询单条数据")
     public Result<PasswordViewPO> selectOne(@PathVariable Long id) {
         return Result.success(this.passwordViewService.getById(id));
     }
@@ -112,6 +113,7 @@ public class PasswordViewController {
      * @return 修改结果
      */
     @PutMapping
+    @Operation(summary = "修改数据", description = "修改数据")
     public Result<Boolean> update(@RequestBody PasswordViewDTO passwordViewDTO) {
         PasswordViewPO byId = this.passwordViewService.getById(passwordViewDTO.getId());
         if (byId == null) {
@@ -134,6 +136,7 @@ public class PasswordViewController {
      * @return 删除结果
      */
     @DeleteMapping
+    @Operation(summary = "删除数据", description = "删除数据")
     public Result<Boolean> delete(@RequestBody List<Long> idList) {
         return Result.success(this.passwordViewService.removeByIds(idList));
     }
