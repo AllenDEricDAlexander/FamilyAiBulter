@@ -1,5 +1,9 @@
 package top.egon.familyaibutler.common.pojo;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
+import lombok.With;
+import lombok.experimental.Accessors;
 import top.egon.familyaibutler.common.enums.ResultCode;
 
 import java.io.Serial;
@@ -15,8 +19,18 @@ import java.util.List;
  * @Description: PageResult Record 类型
  * @Version: 1.0
  */
-public record PageResultRecord<T>(Integer code, String message, Boolean success, List<T> data, Long total,
-                                  Long pageNum, Long pageSize) implements Serializable {
+@With
+@Builder
+@Accessors(chain = true)
+@Schema(title = "全局接口统一返回分页对象", name = "PageResultRecord")
+public record PageResultRecord<T>(
+        @Schema(title = "状态码", name = "code", defaultValue = "10000", type = "int") Integer code,
+        @Schema(title = "描述", name = "message", defaultValue = "10000", type = "String") String message,
+        @Schema(title = "响应状态", name = "success", defaultValue = "true", type = "bool") Boolean success,
+        @Schema(title = "返回结果", name = "data", defaultValue = "test", type = "T") T data,
+        @Schema(title = "总量", name = "total", defaultValue = "100", type = "long") Long total,
+        @Schema(title = "页号", name = "pageNum", defaultValue = "0", type = "int") Long pageNum,
+        @Schema(title = "页大小", name = "pageSize", defaultValue = "10", type = "int") Long pageSize) implements Serializable {
     @Serial
     private static final long serialVersionUID = 8938942437517754680L;
 

@@ -3,7 +3,9 @@ package top.egon.familyaibutler.common.pojo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.With;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 import top.egon.familyaibutler.common.enums.ResultCode;
@@ -21,10 +23,11 @@ import java.io.Serializable;
  * @Version: 1.0
  */
 @Data
+@With
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-@SuperBuilder
 @Schema(title = "全局接口统一返回对象", name = "Result")
 public class Result<T> implements Serializable {
     @Serial

@@ -2,7 +2,6 @@ package top.egon.familyaibutler.family.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,7 +20,6 @@ import top.egon.familyaibutler.common.pojo.Result;
 import top.egon.familyaibutler.family.po.CategoryPo;
 import top.egon.familyaibutler.family.service.CategoryService;
 
-import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 

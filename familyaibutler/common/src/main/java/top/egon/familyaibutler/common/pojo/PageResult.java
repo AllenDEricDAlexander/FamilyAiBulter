@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.With;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 import top.egon.familyaibutler.common.enums.ResultCode;
@@ -21,12 +22,13 @@ import java.util.List;
  * @Description: 接口统一返回分页对象
  * @Version: 1.0
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
+@With
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder(builderMethodName = "PageResultBuilder")
 @Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
+@SuperBuilder(builderMethodName = "PageResultBuilder")
 @Schema(title = "全局接口统一返回分页对象", name = "PageResult")
 public class PageResult<T> extends Result<List<T>> {
     @Serial
