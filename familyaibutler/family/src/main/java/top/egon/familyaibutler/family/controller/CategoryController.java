@@ -1,5 +1,9 @@
 package top.egon.familyaibutler.family.controller;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.CacheStats;
+import com.google.common.cache.LoadingCache;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import top.egon.familyaibutler.common.enums.ResultCode;
 import top.egon.familyaibutler.common.pojo.PageResult;
 import top.egon.familyaibutler.common.pojo.Result;
 import top.egon.familyaibutler.family.po.CategoryPo;
@@ -24,6 +29,7 @@ import top.egon.familyaibutler.family.service.CategoryTypeService;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @BelongsProject: familyaibutler
@@ -46,6 +52,13 @@ public class CategoryController {
 
     private final CategoryTypeService categoryTypeService;
 
+    private final LoadingCache<Long, CategoryPo> categoryCache = CacheBuilder.newBuilder()
+            .maximumSize(1000)
+            .expireAfterWrite(1, TimeUnit.MINUTES)
+            .expireAfterAccess(5, TimeUnit.MINUTES)
+            .concurrencyLevel(Runtime.getRuntime().availableProcessors())
+            .recordStats()
+            .build(CacheLoader.from(key -> categoryService.findById(key).orElseThrow(() -> new RuntimeException("Category not found with id: " + key))));
 
     @GetMapping("/list")
     @Operation(summary = "获取所有分类", description = "获取所有分类")
@@ -58,8 +71,23 @@ public class CategoryController {
     @GetMapping("/category/{id}")
     @Operation(summary = "获取指定分类", description = "获取指定分类")
     public Result<CategoryPo> getCategoryById(@PathVariable(value = "id") Long id) {
-        return Result.success(categoryService.findById(id).orElse(null));
+        Result<CategoryPo> result;
+        try {
+            CategoryPo categoryPo = categoryCache.get(id);
+            result = Result.success(categoryPo);
+        } catch (RuntimeException exception) {
+            if (log.isInfoEnabled()) {
+                log.info("Cache miss for category with id: {}", id);
+                log.info("Cache stats: {}", categoryCache.stats());
+            }
+            result = Result.success(null);
+        } catch (Exception exception) {
+            log.error("Error while retrieving category with id: {}", id, exception);
+            result = Result.fail(ResultCode.INVALID_PARAM.getCode(), "Error while retrieving category with id: " + id, null);
+        }
+        return result;
     }
+
 
     @PostMapping(value = "/category")
     @Operation(summary = "添加分类", description = "添加分类")
@@ -70,6 +98,7 @@ public class CategoryController {
     @PutMapping(value = "/category")
     @Operation(summary = "更新分类", description = "更新分类")
     public Result<CategoryPo> updateCategory(@RequestBody CategoryPo category) {
+        categoryCache.invalidate(category.getId());
         return Result.success(categoryService.update(category));
     }
 
