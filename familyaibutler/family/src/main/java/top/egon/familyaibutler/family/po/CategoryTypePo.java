@@ -6,8 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.SequenceGenerator;
@@ -27,10 +25,10 @@ import java.util.Date;
 /**
  * @BelongsProject: familyaibutler
  * @BelongsPackage: top.egon.familyaibutler.family.po
- * @ClassName: CategoryPo
+ * @ClassName: CategoryTypePo
  * @Author: atluofu
- * @CreateTime: 2025Year-08Month-04Day-11:39
- * @Description: 类型
+ * @CreateTime: 2025Year-08Month-05Day-13:17
+ * @Description: 分类 类型 PO
  * @Version: 1.0
  */
 @EqualsAndHashCode(callSuper = false)
@@ -41,12 +39,12 @@ import java.util.Date;
 @Accessors(chain = true)
 @Builder
 @Entity
-@Table(name = "category")
-@Schema(name = "CategoryPO", title = "Category POJO")
-public class CategoryPo implements Serializable {
+@Table(name = "category_type")
+@Schema(name = "CategoryTypePo", title = "Category Type POJO")
+public class CategoryTypePo implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = -7033547257705498021L;
+    private static final long serialVersionUID = -7041315135873001168L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "menuSeq")
@@ -54,18 +52,12 @@ public class CategoryPo implements Serializable {
     @Schema(title = "id", name = "id", defaultValue = "1", type = "long")
     @Column(name = "id")
     private Long id;
-    @Schema(title = "name", name = "name", defaultValue = "house", type = "String")
-    @Column(name = "name")
-    private String name;
-    @Schema(title = "description", name = "description", defaultValue = "test", type = "String")
+    @Schema(title = "typeName", name = "typeName", defaultValue = "room", type = "String")
+    @Column(name = "type_name")
+    private String typeName;
+    @Schema(title = "description", name = "description", defaultValue = "room", type = "String")
     @Column(name = "description")
     private String description;
-    @Schema(title = "parentId", name = "parentId", defaultValue = "0", type = "long")
-    @Column(name = "parent_id")
-    private Long parentId;
-    @ManyToOne
-    @JoinColumn(name = "type_id")
-    private CategoryTypePo categoryType;
     @Schema(title = "createTime", name = "createTime", defaultValue = "2025-08-01 20:30:40", type = "Date")
     @Column(name = "create_time", updatable = false)
     private Date createTime;

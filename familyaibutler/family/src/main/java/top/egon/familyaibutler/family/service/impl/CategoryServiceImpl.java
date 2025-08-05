@@ -37,13 +37,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryPo save(CategoryPo categoryPo) {
-        return categoryRepository.save(categoryPo);
+        return categoryRepository.saveAndFlush(categoryPo);
     }
 
     @Override
     public CategoryPo update(CategoryPo categoryPo) {
-        categoryRepository.deleteById(categoryPo.getId());
-        return categoryRepository.save(categoryPo);
+        return categoryRepository.saveAndFlush(categoryPo);
     }
 
     @Override
