@@ -2,10 +2,10 @@ package top.egon.familyaibutler.family.controller;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
-import com.google.common.cache.CacheStats;
 import com.google.common.cache.LoadingCache;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -52,13 +52,18 @@ public class CategoryController {
 
     private final CategoryTypeService categoryTypeService;
 
-    private final LoadingCache<Long, CategoryPo> categoryCache = CacheBuilder.newBuilder()
-            .maximumSize(1000)
-            .expireAfterWrite(1, TimeUnit.MINUTES)
-            .expireAfterAccess(5, TimeUnit.MINUTES)
-            .concurrencyLevel(Runtime.getRuntime().availableProcessors())
-            .recordStats()
-            .build(CacheLoader.from(key -> categoryService.findById(key).orElseThrow(() -> new RuntimeException("Category not found with id: " + key))));
+    private LoadingCache<Long, CategoryPo> categoryCache;
+
+    @PostConstruct
+    public void init() {
+        categoryCache = CacheBuilder.newBuilder()
+                .maximumSize(1000)
+                .expireAfterWrite(1, TimeUnit.MINUTES)
+                .expireAfterAccess(5, TimeUnit.MINUTES)
+                .concurrencyLevel(Runtime.getRuntime().availableProcessors())
+                .recordStats()
+                .build(CacheLoader.from(key -> categoryService.findById(key).orElseThrow(() -> new RuntimeException("Category not found with id: " + key))));
+    }
 
     @GetMapping("/list")
     @Operation(summary = "获取所有分类", description = "获取所有分类")

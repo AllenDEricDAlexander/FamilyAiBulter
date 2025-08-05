@@ -13,6 +13,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import top.egon.familyaibutler.common.pojo.Result;
 
 import java.lang.reflect.Method;
 
@@ -45,9 +46,9 @@ public class LogAspect {
         MethodSignature ms = (MethodSignature) proceedingJoinPoint.getSignature();
         Method method = ms.getMethod();
         log.info("===============请求内容===============");
-        log.info("请求地址:" + proceedingJoinPoint.getTarget().getClass().getName());
-        log.info("请求方式:" + method);
-        log.info("请求类方法:" + proceedingJoinPoint.getSignature().getName());
+        log.info("请求地址:{}", proceedingJoinPoint.getTarget().getClass().getName());
+        log.info("请求方式:{}", method);
+        log.info("请求类方法:{}", proceedingJoinPoint.getSignature().getName());
         Object[] args = proceedingJoinPoint.getArgs();
         Object[] arguments = new Object[args.length];
         for (int i = 0; i < args.length; i++) {
