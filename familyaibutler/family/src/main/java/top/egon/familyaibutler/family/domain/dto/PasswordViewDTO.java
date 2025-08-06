@@ -1,6 +1,7 @@
 package top.egon.familyaibutler.family.domain.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,14 +40,17 @@ public class PasswordViewDTO implements Serializable {
     private String name;
     @Schema(title = "password", name = "password", defaultValue = "Test123*.+", type = "String")
     @NotNull
+    @NotEmpty
     private String password;
     @Schema(title = "description", name = "description", defaultValue = "test content", type = "String")
     private String description;
     @Schema(title = "accountNumber", name = "accountNumber", defaultValue = "test001", type = "String")
     @NotNull
+    @NotEmpty
     private String accountNumber;
     @Schema(title = "websit", name = "websit", defaultValue = "www.baidu.com", type = "String")
     @NotNull
+    @NotEmpty
     private String websit;
     @Schema(title = "likeStatus", name = "likeStatus", defaultValue = "false", type = "bool")
     private boolean likeStatus;

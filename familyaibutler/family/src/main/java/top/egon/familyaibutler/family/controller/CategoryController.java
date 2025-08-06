@@ -6,6 +6,7 @@ import com.google.common.cache.LoadingCache;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.PostConstruct;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -96,13 +97,13 @@ public class CategoryController {
 
     @PostMapping(value = "/category")
     @Operation(summary = "添加分类", description = "添加分类")
-    public Result<CategoryPo> saveCategory(@RequestBody CategoryPo category) {
+    public Result<CategoryPo> saveCategory(@RequestBody @Valid CategoryPo category) {
         return Result.success(categoryService.save(category));
     }
 
     @PutMapping(value = "/category")
     @Operation(summary = "更新分类", description = "更新分类")
-    public Result<CategoryPo> updateCategory(@RequestBody CategoryPo category) {
+    public Result<CategoryPo> updateCategory(@RequestBody @Valid CategoryPo category) {
         categoryCache.invalidate(category.getId());
         return Result.success(categoryService.update(category));
     }
@@ -129,13 +130,13 @@ public class CategoryController {
 
     @PostMapping(value = "/category/type")
     @Operation(summary = "添加分类类型", description = "添加分类类型")
-    public Result<CategoryTypePo> saveUser(@RequestBody CategoryTypePo category) {
+    public Result<CategoryTypePo> saveUser(@RequestBody @Valid CategoryTypePo category) {
         return Result.success(categoryTypeService.save(category));
     }
 
     @PutMapping(value = "/category/type")
     @Operation(summary = "更新分类类型", description = "更新分类类型")
-    public Result<CategoryTypePo> updateUser(@RequestBody CategoryTypePo category) {
+    public Result<CategoryTypePo> updateUser(@RequestBody @Valid CategoryTypePo category) {
         return Result.success(categoryTypeService.update(category));
     }
 

@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -77,7 +78,7 @@ public class PasswordViewController {
     @GetMapping(value = {"/password/list/{pageNum}/{pageSize}", "/password/list"})
     public PageResult<List<PasswordViewPO>> selectAll(@PathVariable(value = "pageNum", required = false) @Range(min = 1) Integer pageNum,
                                                       @PathVariable(value = "pageSize", required = false) @Range(min = 1) Integer pageSize
-            , @RequestBody(required = false) PasswordViewDTO passwordViewDTO) {
+            , @RequestBody(required = false) @Valid PasswordViewDTO passwordViewDTO) {
         int realPageNum = 1;
         int realPageSize = 10;
         if (ObjectUtils.isNotEmpty(pageNum)) {
@@ -121,7 +122,7 @@ public class PasswordViewController {
      */
     @PutMapping
     @Operation(summary = "修改数据", description = "修改数据")
-    public Result<Boolean> update(@RequestBody PasswordViewDTO passwordViewDTO) {
+    public Result<Boolean> update(@RequestBody @Valid PasswordViewDTO passwordViewDTO) {
         PasswordViewPO byId = this.passwordViewService.getById(passwordViewDTO.getId());
         if (byId == null) {
             return Result.fail(10001, "未找到该数据", null);
@@ -157,7 +158,7 @@ public class PasswordViewController {
             }
     )
     @PostMapping("/password/add")
-    public Result<String> add(@RequestBody PasswordViewDTO passwordViewDTO) {
+    public Result<String> add(@RequestBody @Valid PasswordViewDTO passwordViewDTO) {
         PasswordViewPO passwordView = PasswordViewPO.builder()
                 .name(passwordViewDTO.getName())
                 .password(passwordViewDTO.getPassword())
