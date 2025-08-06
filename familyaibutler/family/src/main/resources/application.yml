@@ -54,7 +54,16 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-
+  ai:
+    retry:
+      max-attempts: 3
+      backoff:
+        initial-interval: 2000
+        multiplier: 2
+        max-interval: 5000
+      on-client-errors: false
+    zhipuai:
+      api-key: 8272b05b9d4509f7035309fd5cc5f364.Lyv5Es6cufdBx0bn
 
 
 mybatis-plus:
@@ -92,5 +101,3 @@ logging:
   file:
     path: /log/${spring.application.name}
   config: classpath:log/logback-spring.xml
-  level:
-    root: info
