@@ -18,6 +18,14 @@ spring:
                 - /base/**
           filters:
             - StripPrefix=1
+        - id: ai
+          uri: http://127.0.0.1:39091
+          predicates:
+            - name: Path
+              args:
+                - /ai/**
+          filters:
+            - StripPrefix=1
 
 logging:
   file:
@@ -43,3 +51,8 @@ knife4j:
         service-name: family
         context-path: /base
         order: 1
+      - name: ai
+        url: /ai/v3/api-docs?group=default
+        service-name: family
+        context-path: /ai
+        order: 2
