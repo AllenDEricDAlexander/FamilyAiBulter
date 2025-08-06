@@ -57,6 +57,13 @@ public class PasswordViewController {
 
     private final PasswordViewService passwordViewService;
 
+
+    @GetMapping("/business/{businessId}")
+    @Operation(summary = "通过业务主键查询单条数据", description = "通过业务主键查询单条数据")
+    public Result<PasswordViewPO> selectOne(@PathVariable String businessId) {
+        return Result.success(this.passwordViewService.selectByBusinessId(businessId));
+    }
+
     @Operation(summary = "获取账号密码列表", description = "获取账号密码列表",
             parameters = {
                     @Parameter(name = "pageNum", description = "页码", in = ParameterIn.PATH, example = "1"),

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.nulabinc.zxcvbn.Strength;
 import com.nulabinc.zxcvbn.Zxcvbn;
 import org.springframework.stereotype.Service;
+import top.egon.familyaibutler.common.extention.IEgonServiceImpl;
 import top.egon.familyaibutler.family.domain.dto.StrengthDTO;
 import top.egon.familyaibutler.family.mapper.PasswordViewMapper;
 import top.egon.familyaibutler.family.po.PasswordViewPO;
@@ -24,7 +25,7 @@ import java.util.regex.Pattern;
  * @Version: 1.0
  */
 @Service("passwordViewService")
-public class PasswordViewServiceImpl extends ServiceImpl<PasswordViewMapper, PasswordViewPO> implements PasswordViewService {
+public class PasswordViewServiceImpl extends IEgonServiceImpl<PasswordViewMapper, PasswordViewPO> implements PasswordViewService {
 
     // 密码强度检测工具
     private static final Zxcvbn ZXCVBN = new Zxcvbn();

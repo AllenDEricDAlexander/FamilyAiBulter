@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerIntercept
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import top.egon.familyaibutler.common.extention.injector.BaseInjector;
 
 /**
  * @BelongsProject: familyaibutler
@@ -34,6 +35,11 @@ public class MybatisPlusConfig {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
         interceptor.addInnerInterceptor(new BlockAttackInnerInterceptor());
         return interceptor;
+    }
+
+    @Bean
+    public BaseInjector injectBaseInjector() {
+        return new BaseInjector();
     }
 
 }

@@ -3,6 +3,7 @@ package top.egon.familyaibutler.family.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import top.egon.familyaibutler.common.extention.EgonMapper;
 import top.egon.familyaibutler.family.po.PasswordViewPO;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
  * @Version: 1.0
  */
 @Mapper
-public interface PasswordViewMapper extends BaseMapper<PasswordViewPO> {
+public interface PasswordViewMapper extends EgonMapper<PasswordViewPO> {
 
     /**
      * 批量新增数据（MyBatis原生foreach方法）

@@ -50,6 +50,8 @@ public class PasswordViewPO extends Model<PasswordViewPO> implements Serializabl
     @TableId(type = IdType.AUTO)
     private Long id;
 
+    private String businessId;
+
     /**
      * name
      */

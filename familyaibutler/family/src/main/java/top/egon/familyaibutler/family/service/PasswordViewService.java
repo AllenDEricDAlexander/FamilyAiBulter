@@ -1,6 +1,6 @@
 package top.egon.familyaibutler.family.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import top.egon.familyaibutler.common.extention.IEgonService;
 import top.egon.familyaibutler.family.po.PasswordViewPO;
 
 /**
@@ -11,7 +11,7 @@ import top.egon.familyaibutler.family.po.PasswordViewPO;
  * @Description: (PasswordView)表服务接口
  * @Version: 1.0
  */
-public interface PasswordViewService extends IService<PasswordViewPO> {
+public interface PasswordViewService extends IEgonService<PasswordViewPO> {
 
 }
 
