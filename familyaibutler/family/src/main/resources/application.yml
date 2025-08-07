@@ -63,7 +63,7 @@ spring:
         max-interval: 5000
       on-client-errors: false
     zhipuai:
-      api-key: 8272b05b9d4509f7035309fd5cc5f364.Lyv5Es6cufdBx0bn
+      api-key: ${AI_ZHI_PU_KEY}
 
 
 mybatis-plus:

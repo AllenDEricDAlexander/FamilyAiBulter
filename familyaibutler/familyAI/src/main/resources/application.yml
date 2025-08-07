@@ -56,7 +56,7 @@ spring:
         max-interval: 5000
       on-client-errors: false
     dashscope:
-      api-key: sk-f092b11b397b43df983fe2c84697cd9a
+      api-key: ${AI_QWEN_KEY}
 
 springdoc:
   api-docs:
