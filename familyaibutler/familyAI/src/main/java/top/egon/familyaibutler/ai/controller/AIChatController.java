@@ -18,13 +18,17 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.ai.image.ImagePrompt;
 import org.springframework.ai.image.ImageResponse;
 import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
 import org.springframework.ai.rag.retrieval.search.DocumentRetriever;
 import org.springframework.ai.rag.retrieval.search.VectorStoreDocumentRetriever;
 import org.springframework.ai.vectorstore.VectorStore;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +43,8 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.ByteBuffer;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @BelongsProject: familyaibutler
@@ -53,46 +59,41 @@ import java.nio.ByteBuffer;
 @RequestMapping("/qwen")
 @Tag(name = "AI相关接口")
 @Slf4j
-@RequiredArgsConstructor
 public class AIChatController {
 
-    private static final String DEFAULT_PROMPT = "你是一个博学的智能聊天助手，请根据用户提问回答！";
     private static final String TEXT = "床前明月光， 疑是地上霜。 举头望明月， 低头思故乡。";
     private static final String FILE_PATH = "E:\\project\\java project\\familyaibutler\\familyaibutler\\familyAI\\src\\main\\resources\\tts";
-
-    private final ChatClient.Builder chatClientBuilder;
 
     private final DashScopeImageModel imageModel;
     private final DashScopeSpeechSynthesisModel speechSynthesisModel;
     private final VectorStore vectorStore;
 
-    private ChatClient dashScopeChatClient;
+    private final ChatClient dashScopeChatClient;
 
-    @PostConstruct
-    private void init() {
-        this.dashScopeChatClient = chatClientBuilder
-                .defaultSystem(DEFAULT_PROMPT)
-                // 实现 Chat Memory 的 Advisor
-                .defaultAdvisors(
-                        MessageChatMemoryAdvisor.builder(MessageWindowChatMemory.builder().build()).build()
-                )
-                // 实现 Logger 的 Advisor
-                .defaultAdvisors(
-                        new SimpleLoggerAdvisor()
-                )
-                // 设置 ChatClient 中 ChatModel 的 Options 参数
-                .defaultOptions(
-                        DashScopeChatOptions.builder()
-                                .withTopP(0.7)
-                                .build()
-                )
-                .build();
+    public AIChatController(DashScopeImageModel imageModel, DashScopeSpeechSynthesisModel speechSynthesisModel, VectorStore vectorStore, @Qualifier(value = "qwen") ChatClient dashScopeChatClient) {
+        this.imageModel = imageModel;
+        this.speechSynthesisModel = speechSynthesisModel;
+        this.vectorStore = vectorStore;
+        this.dashScopeChatClient = dashScopeChatClient;
     }
 
 
     @GetMapping("/chat/simple")
-    public String simpleChat(String query) {
-        return dashScopeChatClient.prompt(query).call().content();
+    public String simpleChat(String query, String name, String voice) {
+        Message userMessage = new UserMessage(query);
+
+        String systemText = """
+                你是一个友好的 AI 助手，帮助人们寻找信息。
+                你的名字是 {name}。
+                你应该用你的名字回复用户的请求，并以一种 {voice} 的风格进行回复。
+                """;
+
+        SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemText);
+        Message systemMessage = systemPromptTemplate.createMessage(Map.of("name", name, "voice", voice));
+
+        Prompt prompt = new Prompt(List.of(userMessage, systemMessage));
+
+        return dashScopeChatClient.prompt(prompt).call().content();
     }
 
     @GetMapping("image/generate")

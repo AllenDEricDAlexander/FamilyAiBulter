@@ -57,6 +57,14 @@ spring:
       on-client-errors: false
     dashscope:
       api-key: ${AI_QWEN_KEY}
+      chat:
+        options:
+          model: qwen-plus-latest
+    deepseek:
+      api-key: ${AI_DEEP_SEEK_KEY}
+      chat:
+        options:
+          model: deepseek-chat
 
 springdoc:
   api-docs:

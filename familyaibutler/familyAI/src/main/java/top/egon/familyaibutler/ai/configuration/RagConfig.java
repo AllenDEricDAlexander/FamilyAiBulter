@@ -23,12 +23,6 @@ import java.util.List;
 public class RagConfig {
 
     @Bean
-    ChatClient chatClient(ChatClient.Builder builder) {
-        return builder.defaultSystem("你将作为一名Java开发语言的专家，对于用户的使用需求作出解答")
-                .build();
-    }
-
-    @Bean
     VectorStore vectorStore(EmbeddingModel embeddingModel) {
         SimpleVectorStore simpleVectorStore = SimpleVectorStore.builder(embeddingModel)
                 .build();
