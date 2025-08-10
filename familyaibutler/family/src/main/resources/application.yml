@@ -94,8 +94,20 @@ springdoc:
       packages-to-scan: top.egon.familyaibutler.family
 knife4j:
   enable: true
+  documents:
+    - name: 'default'
+      group: 'v0.1'
+      locations: top.egon.familyaibutler.family.controller
   setting:
     language: zh_cn
+    enable-swagger-models: true
+    enable-document-manage: true
+    footer-custom-content: MIT License | Copyright  2025-[FamilyAiBulter](https://github.com/AllenDEricDAlexander/FamilyAiBulter)
+  basic:
+    enable: true
+    username: admin
+    password: 123456
+
 
 logging:
   file:

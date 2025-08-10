@@ -33,7 +33,7 @@ public class SwaggerConfig {
                         .version("v0.0.1")
                         .contact(new Contact()
                                 .name("Egon")
-                                .url("https://github.com/Allendericdalexander/FamilyAIButler")
+                                .url("https://github.com/AllenDEricDAlexander/FamilyAiBulter")
                                 .email("mqa010225@gmail.com"))
                         .license(new License()
                                 .name("MIT License")
@@ -46,9 +46,9 @@ public class SwaggerConfig {
                 .components(new Components()
                         .addSecuritySchemes("Authorization",
                                 new SecurityScheme()
-                                        .type(SecurityScheme.Type.HTTP)
+                                        .type(SecurityScheme.Type.APIKEY)
                                         .scheme("token")
-                                        .bearerFormat("")
+                                        .name("DOC_TOKEN")
                                         .in(SecurityScheme.In.HEADER)
                         ))
                 .addSecurityItem(new SecurityRequirement().addList("Authorization"));

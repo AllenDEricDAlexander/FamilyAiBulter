@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.http.HttpHeaders;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -122,7 +123,7 @@ public class PasswordViewController {
      * @return 修改结果
      */
     @PutMapping
-    @Operation(summary = "修改数据", description = "修改数据", security = {@SecurityRequirement(name = "Authorization")})
+    @Operation(summary = "修改数据", description = "修改数据", security = {@SecurityRequirement(name = HttpHeaders.AUTHORIZATION)})
     public Result<Boolean> update(@RequestBody @Valid PasswordViewDTO passwordViewDTO) {
         PasswordViewPO byId = this.passwordViewService.getById(passwordViewDTO.getId());
         if (byId == null) {
