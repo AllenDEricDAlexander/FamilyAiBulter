@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -121,7 +122,7 @@ public class PasswordViewController {
      * @return 修改结果
      */
     @PutMapping
-    @Operation(summary = "修改数据", description = "修改数据")
+    @Operation(summary = "修改数据", description = "修改数据", security = {@SecurityRequirement(name = "Authorization")})
     public Result<Boolean> update(@RequestBody @Valid PasswordViewDTO passwordViewDTO) {
         PasswordViewPO byId = this.passwordViewService.getById(passwordViewDTO.getId());
         if (byId == null) {
