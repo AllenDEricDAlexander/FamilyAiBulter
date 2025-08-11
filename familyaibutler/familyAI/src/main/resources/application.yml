@@ -48,6 +48,12 @@ spring:
     serialization:
       indent-output: true
   ai:
+    chat:
+      memory:
+        repository:
+          jdbc:
+            initialize-schema: always
+            schema: classpath:/schema.sql
     retry:
       max-attempts: 3
       backoff:
