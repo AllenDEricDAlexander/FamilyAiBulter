@@ -3,7 +3,11 @@ package top.egon.familyaibutler.ai.configuration;
 import com.alibaba.cloud.ai.dashscope.api.DashScopeApi;
 import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatModel;
 import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
+import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.deepseek.DeepSeekChatModel;
 import org.springframework.ai.deepseek.DeepSeekChatOptions;
 import org.springframework.ai.deepseek.api.DeepSeekApi;
@@ -21,7 +25,10 @@ import org.springframework.context.annotation.Configuration;
  * @Version: 1.0
  */
 @Configuration
+@RequiredArgsConstructor
 public class ModelConfig {
+
+    private final ChatMemory chatMemory;
 
     @Bean("deepSeek")
     public ChatClient deepseekR1(DeepSeekChatProperties chatProperties) {
@@ -36,7 +43,9 @@ public class ModelConfig {
                 .defaultOptions(DeepSeekChatOptions.builder().model(DeepSeekApi.ChatModel.DEEPSEEK_REASONER).build())
                 .build();
 
-        return ChatClient.builder(deepSeekChatModel).build();
+        return ChatClient.builder(deepSeekChatModel)
+                .defaultAdvisors(new SimpleLoggerAdvisor())
+                .build();
     }
 
     @Bean("qwen")
@@ -52,7 +61,9 @@ public class ModelConfig {
                 .defaultOptions(DashScopeChatOptions.builder().withModel(DashScopeApi.ChatModel.QWEN_PLUS.getModel()).build())
                 .build();
 
-        return ChatClient.builder(deepSeekChatModel).build();
+        return ChatClient.builder(deepSeekChatModel)
+                .defaultAdvisors(new SimpleLoggerAdvisor(), PromptChatMemoryAdvisor.builder(chatMemory).build())
+                .build();
     }
 
 
