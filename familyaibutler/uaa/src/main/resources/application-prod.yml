@@ -1,0 +1,6 @@
+knife4j:
+  production: true
+
+logging:
+  level:
+    root: error

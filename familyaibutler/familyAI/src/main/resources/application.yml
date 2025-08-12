@@ -71,6 +71,8 @@ spring:
       chat:
         options:
           model: deepseek-chat
+    zhipuai:
+      api-key: ${AI_ZHI_PU_KEY}
 
 springdoc:
   api-docs:

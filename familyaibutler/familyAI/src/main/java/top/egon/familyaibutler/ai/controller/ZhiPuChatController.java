@@ -1,7 +1,6 @@
-package top.egon.familyaibutler.family.controller;
+package top.egon.familyaibutler.ai.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -36,21 +35,14 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/ai")
-@Tag(name = "AI相关接口")
+@Tag(name = "智谱AI相关接口")
 @Slf4j
 @RequiredArgsConstructor
-public class AiChatController {
+public class ZhiPuChatController {
 
     private final ZhiPuAiChatModel chatModel;
 
-    private final ChatClient.Builder chatClientBuilder;
-
-    private ChatClient chatClient;
-
-    @PostConstruct
-    private void init() {
-        chatClient = chatClientBuilder.build();
-    }
+    private final Map<String, ChatClient> chatClientMap;
 
     @GetMapping("/prompt")
     public String prompt(@RequestParam("name") String name,
@@ -73,12 +65,12 @@ public class AiChatController {
 
     @GetMapping("/chatNoSysPrompt")
     public String chatNoPrompt(@RequestParam(value = "message", defaultValue = "你叫什么名字") String message) {
-        return this.chatClient.prompt().user(message).call().content();
+        return this.chatClientMap.get("zhipu").prompt().user(message).call().content();
     }
 
     @GetMapping("/chat")
     public String chat(@RequestParam(value = "message", defaultValue = "你叫什么名字") String message) {
-        return this.chatClient.prompt("你是一个计算机编程助手，提供编程相关的帮助。").user(message).call().content();
+        return this.chatClientMap.get("zhipu").prompt("你是一个计算机编程助手，提供编程相关的帮助。").user(message).call().content();
     }
 
     @GetMapping("/generate")

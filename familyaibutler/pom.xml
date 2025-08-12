@@ -14,6 +14,7 @@
         <module>family</module>
         <module>common</module>
         <module>familyAI</module>
+        <module>uaa</module>
     </modules>
     <groupId>top.egon</groupId>
     <artifactId>familyaibutler</artifactId>

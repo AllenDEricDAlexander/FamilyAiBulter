@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import top.egon.familyaibutler.common.pojo.Result;
 import top.egon.familyaibutler.family.FamilyApplication;
+import top.egon.familyaibutler.family.mapper.PasswordViewMapper;
 import top.egon.familyaibutler.family.po.PasswordViewPO;
 import top.egon.familyaibutler.family.service.impl.PasswordViewServiceImpl;
 
@@ -51,11 +52,16 @@ class TestPassword {
     @Mock
     private PasswordViewServiceImpl passwordViewService;
 
+    @Mock
+    private PasswordViewMapper passwordViewMapper;
 
     @Test
     void testSelectOne() throws Exception {
-        PasswordViewPO passwordViewPO1 = new PasswordViewPO();
-        Mockito.when(passwordViewService.getById(1L)).thenReturn(passwordViewPO1);
+        PasswordViewPO passwordViewPO1 = PasswordViewPO.builder()
+                .id(1L)
+                .accountNumber("001")
+                .name("name001").build();
+        Mockito.when(passwordViewMapper.selectById(1L)).thenReturn(passwordViewPO1);
         mockMvc.perform(MockMvcRequestBuilders.get("/password/1")
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().isOk())
