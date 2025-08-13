@@ -5,6 +5,8 @@ import java.util.List;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+import top.egon.familyaibutler.uaa.po.RolePO;
 import top.egon.familyaibutler.uaa.po.UserPO;
 
  /**
@@ -34,6 +36,12 @@ public interface UserMapper extends BaseMapper<UserPO> {
     * @throws org.springframework.jdbc.BadSqlGrammarException 入参是空List的时候会抛SQL语句错误的异常，请自行校验入参
     */
     int insertOrUpdateBatch(@Param("entities") List<UserPO> entities);
+
+
+     @Select("SELECT r.* FROM role r " +
+             "JOIN user_role ur ON r.id = ur.role_id " +
+             "WHERE ur.user_id = #{userId}")
+     List<RolePO> selectRolesByUserId(Long userId);
 
 }
 

@@ -1,7 +1,9 @@
 package top.egon.familyaibutler.uaa.po;
 
 
-
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.AllArgsConstructor;
@@ -12,7 +14,9 @@ import lombok.NoArgsConstructor;
 import lombok.With;
 import lombok.experimental.Accessors;
 
+import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @BelongsProject: familyaibutler
@@ -31,12 +35,18 @@ import java.io.Serializable;
 @Builder
 @TableName("role")
 public class RolePO extends Model<RolePO> implements Serializable {
-    private Integer id;
-    
+    @Serial
+    private static final long serialVersionUID = -4600110331279411831L;
+
+    @TableId(type = IdType.AUTO)
+    private Long id;
+
     private String name;
-    
+
     private String description;
-    
+
+    @TableField(exist = false)
+    private List<PermissionPO> permissions;
 
 
     /**
