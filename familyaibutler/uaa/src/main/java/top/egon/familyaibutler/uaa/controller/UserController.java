@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import top.egon.familyaibutler.common.pojo.Result;
-import top.egon.familyaibutler.common.utils.JwtTokenUtil;
+import top.egon.familyaibutler.uaa.utils.JwtTokenUtil;
 import top.egon.familyaibutler.uaa.po.UserPO;
 import top.egon.familyaibutler.uaa.service.UserService;
 import top.egon.familyaibutler.uaa.vo.UserPermissionsVO;

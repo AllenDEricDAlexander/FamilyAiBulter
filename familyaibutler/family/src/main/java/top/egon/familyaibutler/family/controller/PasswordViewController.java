@@ -3,6 +3,7 @@ package top.egon.familyaibutler.family.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -68,7 +69,7 @@ public class PasswordViewController {
         PasswordViewPO passwordView = cacheService.get(businessId, PasswordViewPO.class);
         if (ObjectUtils.isEmpty(passwordView)) {
             passwordView = this.passwordViewService.selectByBusinessId(businessId);
-            cacheService.put(businessId, passwordView, 60 * 60 * 24);
+            cacheService.put(businessId, passwordView, 60L * 60 * 24);
         }
         return Result.success(passwordView);
     }
@@ -122,7 +123,7 @@ public class PasswordViewController {
         PasswordViewPO passwordView = cacheService.get(String.valueOf(id), PasswordViewPO.class);
         if (ObjectUtils.isEmpty(passwordView)) {
             passwordView = this.passwordViewService.getById(id);
-            cacheService.put(String.valueOf(id), passwordView, 60 * 60 * 24);
+            cacheService.put(String.valueOf(id), passwordView, 60L * 60 * 24);
         }
         return Result.success(passwordView);
     }
@@ -140,7 +141,7 @@ public class PasswordViewController {
         if (byId == null) {
             return Result.fail(10001, "未找到该数据", null);
         }
-        cacheService.put(byId.getBusinessId(), byId, 60 * 60 * 24);
+        cacheService.put(byId.getBusinessId(), byId, 60L * 60 * 24);
         byId.setName(passwordViewDTO.getName())
                 .setPassword(passwordViewDTO.getPassword())
                 .setDescription(passwordViewDTO.getDescription())

@@ -20,7 +20,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import top.egon.familyaibutler.common.pojo.Result;
-import top.egon.familyaibutler.common.utils.JwtTokenUtil;
+import top.egon.familyaibutler.uaa.utils.JwtTokenUtil;
 import top.egon.familyaibutler.uaa.filter.JwtAuthenticationFilter;
 
 import java.util.List;

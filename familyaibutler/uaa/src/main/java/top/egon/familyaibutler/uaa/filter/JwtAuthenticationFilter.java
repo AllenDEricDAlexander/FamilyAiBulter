@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
-import top.egon.familyaibutler.common.utils.JwtTokenUtil;
+import top.egon.familyaibutler.uaa.utils.JwtTokenUtil;
 
 import java.io.IOException;
 

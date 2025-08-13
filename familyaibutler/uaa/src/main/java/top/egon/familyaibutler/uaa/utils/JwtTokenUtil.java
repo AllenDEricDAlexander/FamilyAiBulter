@@ -1,4 +1,4 @@
-package top.egon.familyaibutler.common.utils;
+package top.egon.familyaibutler.uaa.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

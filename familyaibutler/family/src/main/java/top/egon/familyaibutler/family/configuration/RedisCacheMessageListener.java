@@ -2,9 +2,11 @@ package top.egon.familyaibutler.family.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.cache.Cache;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import top.egon.familyaibutler.common.pojo.CacheMessage;
 
@@ -19,18 +21,18 @@ import top.egon.familyaibutler.common.pojo.CacheMessage;
  */
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class RedisCacheMessageListener implements MessageListener {
 
     private final Cache<String, Object> guavaCache;
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public RedisCacheMessageListener(Cache<String, Object> guavaCache) {
-        this.guavaCache = guavaCache;
-    }
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
         try {
+
             CacheMessage cacheMessage = mapper.readValue(message.getBody(), CacheMessage.class);
             if ("evict".equals(cacheMessage.getAction())) {
                 guavaCache.invalidate(cacheMessage.getCacheKey());
