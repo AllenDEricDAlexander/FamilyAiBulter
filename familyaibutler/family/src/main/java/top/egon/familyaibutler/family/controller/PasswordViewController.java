@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.egon.familyaibutler.common.pojo.PageResult;
 import top.egon.familyaibutler.common.pojo.Result;
+import top.egon.familyaibutler.family.configuration.CacheService;
 import top.egon.familyaibutler.family.domain.dto.PasswordViewDTO;
 import top.egon.familyaibutler.family.domain.dto.StrengthDTO;
 import top.egon.familyaibutler.family.po.PasswordViewPO;
@@ -59,12 +60,17 @@ public class PasswordViewController {
     private static final int PASSWORD_LENGTH = 12;
 
     private final PasswordViewService passwordViewService;
-
+    private final CacheService cacheService;
 
     @GetMapping("/business/{businessId}")
     @Operation(summary = "通过业务主键查询单条数据", description = "通过业务主键查询单条数据")
     public Result<PasswordViewPO> selectOne(@PathVariable String businessId) {
-        return Result.success(this.passwordViewService.selectByBusinessId(businessId));
+        PasswordViewPO passwordView = cacheService.get(businessId, PasswordViewPO.class);
+        if (ObjectUtils.isEmpty(passwordView)) {
+            passwordView = this.passwordViewService.selectByBusinessId(businessId);
+            cacheService.put(businessId, passwordView, 60 * 60 * 24);
+        }
+        return Result.success(passwordView);
     }
 
     @Operation(summary = "获取账号密码列表", description = "获取账号密码列表",
@@ -113,7 +119,12 @@ public class PasswordViewController {
     @GetMapping("{id}")
     @Operation(summary = "通过主键查询单条数据", description = "通过主键查询单条数据")
     public Result<PasswordViewPO> selectOne(@PathVariable Long id) {
-        return Result.success(this.passwordViewService.getById(id));
+        PasswordViewPO passwordView = cacheService.get(String.valueOf(id), PasswordViewPO.class);
+        if (ObjectUtils.isEmpty(passwordView)) {
+            passwordView = this.passwordViewService.getById(id);
+            cacheService.put(String.valueOf(id), passwordView, 60 * 60 * 24);
+        }
+        return Result.success(passwordView);
     }
 
     /**
@@ -129,6 +140,7 @@ public class PasswordViewController {
         if (byId == null) {
             return Result.fail(10001, "未找到该数据", null);
         }
+        cacheService.put(byId.getBusinessId(), byId, 60 * 60 * 24);
         byId.setName(passwordViewDTO.getName())
                 .setPassword(passwordViewDTO.getPassword())
                 .setDescription(passwordViewDTO.getDescription())
@@ -148,6 +160,7 @@ public class PasswordViewController {
     @DeleteMapping
     @Operation(summary = "删除数据", description = "删除数据")
     public Result<Boolean> delete(@RequestBody List<Long> idList) {
+        idList.forEach(id -> cacheService.evict(String.valueOf(id)));
         return Result.success(this.passwordViewService.removeByIds(idList));
     }
 
