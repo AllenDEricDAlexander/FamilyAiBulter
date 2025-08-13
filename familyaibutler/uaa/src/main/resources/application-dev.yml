@@ -16,3 +16,7 @@ mybatis-plus:
 logging:
   level:
     root: info
+
+jwt:
+  secret: pKQzTRvVpla2baIvNh6oWNrBWRuCidWi
+  expiration: 216000

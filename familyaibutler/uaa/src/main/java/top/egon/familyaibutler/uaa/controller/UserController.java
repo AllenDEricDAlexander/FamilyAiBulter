@@ -3,8 +3,15 @@ package top.egon.familyaibutler.uaa.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +23,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import top.egon.familyaibutler.common.pojo.Result;
+import top.egon.familyaibutler.common.utils.JwtTokenUtil;
 import top.egon.familyaibutler.uaa.po.UserPO;
 import top.egon.familyaibutler.uaa.service.UserService;
+import top.egon.familyaibutler.uaa.vo.UserPermissionsVO;
 
 import java.util.List;
 
@@ -34,14 +43,41 @@ import java.util.List;
 @Slf4j
 @Validated
 @RequestMapping("user")
+@RequiredArgsConstructor
 public class UserController {
     /**
      * 服务对象
      */
     private final UserService userService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenUtil jwtTokenUtil;
 
-    UserController(UserService userService) {
-        this.userService = userService;
+
+    @GetMapping("/getPermissionsList")
+    @Operation(summary = "获取权限用户列表")
+    public Result<List<UserPermissionsVO>> getPermissionsList() {
+        List<UserPermissionsVO> userPermissionsVOList = this.userService.getPermissionsList();
+        return Result.success(userPermissionsVOList);
+    }
+
+    @GetMapping("/getList")
+    @Operation(summary = "获取用户列表")
+    public Result<List<UserPO>> getList() {
+        List<UserPO> userVOList = this.userService.getList();
+        return Result.success(userVOList);
+    }
+
+    @PostMapping(value = "/login")
+    @Operation(summary = "用户登录")
+    public Result<String> login(@RequestBody UserPO userDTO) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // 生成JWT令牌
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String token = jwtTokenUtil.generateToken(userDetails.getUsername(), userDetails.getAuthorities());
+
+        return Result.success(token);
     }
 
     /**
