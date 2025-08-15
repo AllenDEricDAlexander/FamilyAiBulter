@@ -4,10 +4,17 @@ server:
 spring:
   main:
     web-application-type: reactive
+    allow-bean-definition-overriding: true
   application:
     name: gateway
   cloud:
     gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
       enabled: true
       routes:
         - id: family
@@ -56,3 +63,15 @@ knife4j:
         service-name: family
         context-path: /ai
         order: 2
+
+family-gateway:
+  jwt:
+    ignoreUrlSet:
+      - /user/login
+      - /user/register
+      - /user/refresh
+    authorization: Authorization
+    accessKey: MTIzNDU2
+    refresh-key: MTIzNDU2
+    access-token-expire-time: 300000
+    refresh-token-expire-time: 2592000000
