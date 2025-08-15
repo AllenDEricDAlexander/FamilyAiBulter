@@ -39,19 +39,21 @@ public class Result<T> implements Serializable {
     private String message;
     @Schema(title = "响应状态", name = "success", defaultValue = "true", type = "bool")
     private Boolean success;
+    @Schema(title = "时间戳", name = "timestamp", defaultValue = "123123456456", type = "int")
+    private Long timestamp;
     @Schema(title = "返回结果", name = "data", defaultValue = "test", type = "T")
     private T data;
 
     public static <T> Result<T> success(T res) {
-        return new Result<>(ResultCode.SUCCESS.getCode(), "success", true, res);
+        return new Result<>(ResultCode.SUCCESS.getCode(), "success", true, System.currentTimeMillis(), res);
     }
 
     public static <T> Result<T> fail(Integer errorCode, String msg, T res) {
-        return new Result<>(errorCode, msg, true, res);
+        return new Result<>(errorCode, msg, true, System.currentTimeMillis(), res);
     }
 
     public static <T> Result<T> result(Integer code, String message, Boolean success, T res) {
-        return new Result<>(code, message, success, res);
+        return new Result<>(code, message, success, System.currentTimeMillis(), res);
     }
 
 }

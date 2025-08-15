@@ -49,6 +49,7 @@ spring:
       fail-on-unknown-properties: false
     serialization:
       indent-output: true
+    time-zone: GMT+8
   jpa:
     hibernate:
       ddl-auto: update

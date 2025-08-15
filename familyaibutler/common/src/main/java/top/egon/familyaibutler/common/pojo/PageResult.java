@@ -54,7 +54,7 @@ public class PageResult<T> extends Result<List<T>> {
     }
 
     public PageResult(Integer code, String message, Boolean success, List<T> data, Long pageNum, Long pageSize, Long total) {
-        super(code, message, success, data);
+        super(code, message, success, System.currentTimeMillis(), data);
         this.pageNum = pageNum;
         this.pageSize = pageSize;
         this.total = total;
