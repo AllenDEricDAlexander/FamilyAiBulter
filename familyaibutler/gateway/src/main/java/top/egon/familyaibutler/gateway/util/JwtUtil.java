@@ -2,6 +2,7 @@ package top.egon.familyaibutler.gateway.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -33,15 +34,15 @@ import java.util.Optional;
 @Getter
 public class JwtUtil {
 
-    private Key accessKey;
+    private final Key accessKey;
 
-    private Key refreshKey;
+    private final Key refreshKey;
 
-    private long accessTokenExpireTime;
+    private final long accessTokenExpireTime;
 
-    private long refreshTokenExpireTime;
+    private final long refreshTokenExpireTime;
 
-    private FamilyButlerGateWayProperties familyButlerGatewayProperties;
+    private final FamilyButlerGateWayProperties familyButlerGatewayProperties;
 
     public JwtUtil(FamilyButlerGateWayProperties familyButlerGatewayProperties) {
         this.familyButlerGatewayProperties = familyButlerGatewayProperties;
@@ -92,15 +93,32 @@ public class JwtUtil {
         return false;
     }
 
+    public String refreshJWTToken(String oldToken, long timeToExpire, Key signKey) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(signKey)
+                .build()
+                .parseClaimsJws(oldToken)
+                .getBody();
+
+        Date newExpirationDate = new Date(System.currentTimeMillis() + timeToExpire);
+
+        return Jwts.builder()
+                .setId(claims.getId())
+                .setSubject(claims.getSubject())
+                .claim("authorities", claims.get("authorities"))
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(newExpirationDate)
+                .signWith(signKey, SignatureAlgorithm.HS512)
+                .compact();
+    }
 
     public String createJWTToken(Map<String, Object> userDetails, long timeToExpire, Key signKey) {
         return Jwts
                 .builder()
+                // todo uuidv7
                 .setId("ycyd")
                 .setSubject(userDetails.get("username").toString())
-                .claim("authorities",
-                        userDetails.get("authorities")
-                )
+                .claim("authorities", userDetails.get("authorities"))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + timeToExpire))
                 .signWith(signKey, SignatureAlgorithm.HS512).compact();

@@ -2,6 +2,7 @@ package top.egon.familyaibutler.gateway.filter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Claims;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import top.egon.familyaibutler.gateway.exception.BusinessException;
 import top.egon.familyaibutler.gateway.util.JwtUtil;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 /**
  * @BelongsProject: familyaibutler
@@ -59,7 +61,12 @@ public class JwtTokenFilter implements GlobalFilter, Ordered {
             if (!jwtUtil.validateAccessToken(token)) {
                 throw new BusinessException("token已过期");
             }
-            return chain.filter(exchange);
+            return chain.filter(exchange).then(Mono.fromRunnable(() -> {
+                ServerHttpResponse response = exchange.getResponse();
+                String oldToken = response.getHeaders().getFirst(jwt.getAuthorization());
+                String newToken = jwtUtil.refreshJWTToken(oldToken, jwt.getAccessTokenExpireTime(), jwtUtil.getAccessKey());
+                response.getHeaders().add(jwt.getAuthorization(), newToken);
+            }));
         } catch (Exception e) {
             return authError(resp, e.getMessage());
         }
