@@ -23,6 +23,16 @@ spring:
             - name: Path
               args:
                 - /base/**
+            - name: Method
+              args:
+                - GET
+                - POST
+                - PUT
+                - DELETE
+            - name: Host
+              args:
+                - www.baidu.com
+                - localhost
           filters:
             - StripPrefix=1
         - id: ai
@@ -31,6 +41,15 @@ spring:
             - name: Path
               args:
                 - /ai/**
+        - id: test
+          uri: http://127.0.0.1:49091
+          predicates:
+            - name: Path
+              args:
+                - /test/**
+            - Header=Authorization, ^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$ # jwt 格式校验 todo 自定义断言
+            - RemoteAddr=192.168.3.95/24
+            - Host=**.egon.top
           filters:
             - StripPrefix=1
 

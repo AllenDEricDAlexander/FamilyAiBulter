@@ -12,6 +12,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -32,13 +33,14 @@ import java.util.Optional;
  * @Version: 1.0
  */
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class JwtTokenFilter implements GlobalFilter, Ordered {
 
     private final ObjectMapper objectMapper;
     private final JwtUtil jwtUtil;
 
-    private final FamilyButlerGateWayProperties.Jwt jwt = new FamilyButlerGateWayProperties.Jwt();
+    private final FamilyButlerGateWayProperties familyButlerGateWayProperties;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -52,14 +54,14 @@ public class JwtTokenFilter implements GlobalFilter, Ordered {
 
         // todo 日志审计体系
 
-        for (String ignoreUrl : jwt.getIgnoreurlset()) {
+        for (String ignoreUrl : familyButlerGateWayProperties.getJwt().getIgnoreurlset()) {
             if (url.contains(ignoreUrl)) {
                 // todo 透传 tenantID jwt附带信息
                 return chain.filter(exchange);
             }
         }
 
-        String token = exchange.getRequest().getHeaders().getFirst(jwt.getAuthorization());
+        String token = exchange.getRequest().getHeaders().getFirst(familyButlerGateWayProperties.getJwt().getAuthorization());
         ServerHttpResponse resp = exchange.getResponse();
 
         if (StringUtils.isBlank(token)) {
@@ -73,9 +75,9 @@ public class JwtTokenFilter implements GlobalFilter, Ordered {
             }
             return chain.filter(exchange).then(Mono.fromRunnable(() -> {
                 ServerHttpResponse response = exchange.getResponse();
-                String oldToken = response.getHeaders().getFirst(jwt.getAuthorization());
-                String newToken = jwtUtil.refreshJWTToken(oldToken, jwt.getAccessTokenExpireTime(), jwtUtil.getAccessKey());
-                response.getHeaders().add(jwt.getAuthorization(), newToken);
+                String oldToken = response.getHeaders().getFirst(familyButlerGateWayProperties.getJwt().getAuthorization());
+                String newToken = jwtUtil.refreshJWTToken(oldToken, familyButlerGateWayProperties.getJwt().getAccessTokenExpireTime(), jwtUtil.getAccessKey());
+                response.getHeaders().add(familyButlerGateWayProperties.getJwt().getAuthorization(), newToken);
             }));
         } catch (Exception e) {
             return authError(resp, e.getMessage());
