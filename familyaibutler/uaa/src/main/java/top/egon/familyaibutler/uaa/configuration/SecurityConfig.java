@@ -72,7 +72,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/index.html",
+                                // todo 令牌刷新管控
                                 "/user/logout",
                                 "/user/login",
                                 "/user/register",
@@ -82,11 +82,13 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/swagger-resources/**",
                                 "/favicon.ico",
-                                "/login.html",
                                 "/css/**",
                                 "/js/**"
-                        ).permitAll()
-                        .anyRequest().authenticated()
+                        )
+                        .permitAll()
+                        .anyRequest()
+                        // todo 细化管理 权限
+                        .authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
@@ -95,20 +97,20 @@ public class SecurityConfig {
                             response.setContentType("application/json;charset=UTF-8");
                             response.setStatus(401);
                             response.getWriter().write(
-                                    objectMapper.writeValueAsString(Result.fail(401, "请先登录", "请先登录"))
+                                    objectMapper.writeValueAsString(Result.fail(401, "认证失败", "请先登录"))
                             );
                         })
                         .accessDeniedHandler((request, response, ex) -> {
                             response.setContentType("application/json;charset=UTF-8");
                             response.setStatus(403);
                             response.getWriter().write(
-                                    objectMapper.writeValueAsString(Result.fail(403, "权限不足", "权限不足"))
+                                    objectMapper.writeValueAsString(Result.fail(403, "授权失败", "权限不足"))
                             );
                         })
                 )
                 //--- CORS 跨域配置（按需启用）---
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                //--- 禁用 CSRF 防护（传统 Web 应用建议启用）---
+                //--- 禁用 CSRF 防护（传统 Web 应用建议启用）---  todo 思考是否需要启用 如何透传给前端
                 .csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
@@ -123,12 +125,15 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
+        // todo 生产只允许注册中心的实例IP访问
         config.setAllowedOrigins(List.of("http://localhost:8080"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         config.setAllowCredentials(true);
         config.setAllowedHeaders(List.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
+        // todo 允许登录 注册 接口跨域 考虑是否合理
+        source.registerCorsConfiguration("/user/login", new CorsConfiguration());
         return source;
     }
 }

@@ -34,6 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
 
+        // todo jwt 认证细化
         String token = extractToken(request);
         if (token != null && jwtTokenUtil.validateToken(token)) {
             Claims claims = jwtTokenUtil.parseToken(token);
@@ -45,6 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+        // todo 清空安全上下文？
         chain.doFilter(request, response);
     }
 

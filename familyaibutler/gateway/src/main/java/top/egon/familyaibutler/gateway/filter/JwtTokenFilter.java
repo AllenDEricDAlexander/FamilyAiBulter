@@ -44,8 +44,17 @@ public class JwtTokenFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String url = exchange.getRequest().getURI().getPath();
 
+        // todo IP 黑名单
+
+        // todo 限流
+
+        // todo 请求过滤
+
+        // todo 日志审计体系
+
         for (String ignoreUrl : jwt.getIgnoreurlset()) {
             if (url.contains(ignoreUrl)) {
+                // todo 透传 tenantID jwt附带信息
                 return chain.filter(exchange);
             }
         }
@@ -59,6 +68,7 @@ public class JwtTokenFilter implements GlobalFilter, Ordered {
 
         try {
             if (!jwtUtil.validateAccessToken(token)) {
+                // todo 判断 refreshToken 刷新token
                 throw new BusinessException("token已过期");
             }
             return chain.filter(exchange).then(Mono.fromRunnable(() -> {
