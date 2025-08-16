@@ -47,6 +47,10 @@ spring:
             - name: Path
               args:
                 - /test/**
+            - name: AutoFamily # 全匹配
+              args:
+                - userType: test
+            - AutoFamily=test # 短匹配
             - Header=Authorization, ^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$ # jwt 格式校验 todo 自定义断言
             - RemoteAddr=192.168.3.95/24
             - Host=**.egon.top
