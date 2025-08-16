@@ -33,7 +33,7 @@ import java.util.Optional;
  * @Version: 1.0
  */
 @Slf4j
-@Component
+//@Component
 @RequiredArgsConstructor
 public class JwtTokenFilter implements GlobalFilter, Ordered {
 
@@ -69,6 +69,7 @@ public class JwtTokenFilter implements GlobalFilter, Ordered {
         }
 
         try {
+            // todo 校验令牌 Guava Cache 中是否存在
             if (!jwtUtil.validateAccessToken(token)) {
                 // todo 判断 refreshToken 刷新token
                 throw new BusinessException("token已过期");

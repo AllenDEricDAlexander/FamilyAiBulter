@@ -56,6 +56,20 @@ spring:
             - Host=**.egon.top
           filters:
             - StripPrefix=1
+            - RedirectTo=302, http://www.baidu.com/ # 访问http://localhost:49091/test/** 跳转到http://www.baidu.com/
+              #- SetPath=/pay/{segment}  # {segment}表示占位符，你写abc也行但要上下一致 不能模糊匹配
+              #- PrefixPath=/test # http://localhost:9527/test/gateway/filter  被分拆为: PrefixPath + Path
+              #- AddRequestHeader=X-Request-1,Value1  # 请求头kv，若一头含有多参则重写一行设置
+              #- AddRequestHeader=X-Request-2,Value2
+              #- RemoveRequestHeader=sec-fetch-site      # 删除请求头sec-fetch-site
+              #- SetRequestHeader=sec-fetch-mode, Blue-updatebygateway # 将请求头sec-fetch-mode对应的值修改为Blue-updatebygateway
+              #- AddRequestParameter=customerId,9527001 # 新增请求参数Parameter：k ，v
+              #- RemoveRequestParameter=customerName   # 删除url请求参数customerName，你传递过来也是null
+              #- AddResponseHeader=X-Response-family, BlueResponse # 新增请求参数X-Response-family 并设值为BlueResponse
+              #- SetResponseHeader=Date,2099-11-11 # 设置回应头Date值为2099-11-11
+              #- RemoveResponseHeader=Content-Type # 将默认自带Content-Type回应属性删除
+      default-filters:
+        - AddResponseHeader=X-Response-family, true
 
 logging:
   file:
