@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 import lombok.With;
 import lombok.experimental.Accessors;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * @BelongsProject: familyaibutler
  * @BelongsPackage: top.egon.familyaibutler.family.domain.dto
@@ -26,7 +29,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Builder
 @Schema(name = "StrengthDTO", title = "Strength api dto")
-public class StrengthDTO {
+public class StrengthDTO implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -5108785276179717760L;
     @Schema(title = "破解所需秒数", name = "crackTimeSeconds", type = "List<Double>")
     private AttackTimes.CrackTimeSeconds crackTimeSeconds;
     @Schema(title = "破解所需时间", name = "crackTimesDisplay", type = "List<String>")

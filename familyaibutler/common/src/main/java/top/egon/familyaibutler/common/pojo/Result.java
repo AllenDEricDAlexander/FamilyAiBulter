@@ -10,6 +10,7 @@ import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 import top.egon.familyaibutler.common.enums.ResultCode;
 
+import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -39,7 +40,7 @@ public class Result<T> implements Serializable {
     private String message;
     @Schema(title = "响应状态", name = "success", defaultValue = "true", type = "bool")
     private Boolean success;
-    @Schema(title = "时间戳", name = "timestamp", defaultValue = "123123456456", type = "int")
+    @Schema(title = "时间戳", name = "timestamp", defaultValue = "123123456456", type = "int", description = "返回时间")
     private Long timestamp;
     @Schema(title = "返回结果", name = "data", defaultValue = "test", type = "T")
     private T data;
@@ -54,6 +55,18 @@ public class Result<T> implements Serializable {
 
     public static <T> Result<T> result(Integer code, String message, Boolean success, T res) {
         return new Result<>(code, message, success, System.currentTimeMillis(), res);
+    }
+
+    @Serial
+    private void writeObject(java.io.ObjectOutputStream stream)
+            throws IOException {
+        stream.defaultWriteObject();
+    }
+
+    @Serial
+    private void readObject(java.io.ObjectInputStream stream)
+            throws IOException, ClassNotFoundException {
+        stream.defaultReadObject();
     }
 
 }
