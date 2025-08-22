@@ -32,11 +32,15 @@ import top.egon.familyaibutler.common.pojo.Result;
 import top.egon.familyaibutler.family.configuration.CacheService;
 import top.egon.familyaibutler.family.domain.dto.PasswordViewDTO;
 import top.egon.familyaibutler.family.domain.dto.StrengthDTO;
+import top.egon.familyaibutler.family.po.CategoryDTO;
+import top.egon.familyaibutler.family.po.CategoryPo;
 import top.egon.familyaibutler.family.po.PasswordViewPO;
+import top.egon.familyaibutler.family.po.convetor.CategoryConverter;
 import top.egon.familyaibutler.family.service.PasswordViewService;
 import top.egon.familyaibutler.family.service.impl.PasswordViewServiceImpl;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -241,6 +245,15 @@ public class PasswordViewController {
     )
     @GetMapping("/checkValid/{password}")
     public Result<Boolean> checkValid(@PathVariable String password) {
+        CategoryPo source = CategoryPo.builder().id(1L).name("abc").description("abc").parentId(0L).categoryType(null).createTime(new Date()).updateTime(new Date()).build();
+
+        // 单个对象转换
+        CategoryDTO target = CategoryConverter.INSTANCE.toTarget(source);
+        System.out.println(target);
+
+        // 列表转换
+        List<CategoryDTO> targets = CategoryConverter.INSTANCE.toTargetList(List.of(source));
+        System.out.println(targets);
         return Result.success(PasswordViewServiceImpl.isValidPassword(password));
     }
 
