@@ -3,7 +3,6 @@ package top.egon.familyaibutler.family.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -225,10 +224,11 @@ public class PasswordViewController {
     @Operation(summary = "检查密码强度", description = "检查密码强度",
             parameters = {
                     @Parameter(name = "password", description = "password", in = ParameterIn.PATH, required = true, example = "xY7!pQ2@zR5#")
-            },
-            responses = {
-                    @ApiResponse(description = "返回一个密码强度对象", responseCode = "10000", content = @Content(schema = @Schema(implementation = Result.class, description = "密码强度", name = "密码强度", title = "密码强度", example = "*")))
             }
+//            ,
+//            responses = {
+//                    @ApiResponse(description = "返回一个密码强度对象", responseCode = "10000", content = @Content(schema = @Schema(implementation = Result.class, description = "密码强度", name = "密码强度", title = "密码强度", example = "*")))
+//            }
     )
     @GetMapping("/checkStrength/{password}")
     public Result<StrengthDTO> checkPassword(@PathVariable String password) {

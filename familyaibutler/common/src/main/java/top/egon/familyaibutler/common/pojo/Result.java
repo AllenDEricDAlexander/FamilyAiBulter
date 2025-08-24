@@ -42,7 +42,7 @@ public class Result<T> implements Serializable {
     private Boolean success;
     @Schema(title = "时间戳", name = "timestamp", defaultValue = "123123456456", type = "int", description = "返回时间")
     private Long timestamp;
-    @Schema(title = "返回结果", name = "data", defaultValue = "test", type = "T")
+    @Schema(title = "返回结果", name = "data", type = "T")
     private T data;
 
     public static <T> Result<T> success(T res) {
