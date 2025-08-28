@@ -2,9 +2,13 @@ package top.egon.familyaibutler.gateway.configuration;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -18,7 +22,9 @@ import java.util.Set;
  */
 @Setter
 @Getter
+@Slf4j
 @Configuration
+@RefreshScope
 @ConfigurationProperties(prefix = "family-gateway")
 public class FamilyButlerGateWayProperties {
 
@@ -28,11 +34,11 @@ public class FamilyButlerGateWayProperties {
     @Setter
     public static class Jwt {
 
-        private Set<String> ignoreurlset = Set.of(
+        private Set<String> ignoreurlset = new HashSet<>(Arrays.asList(
                 "/api/user/login",
                 "/api/user/register",
                 "/api/user/refresh"
-        );
+        ));
 
         private String authorization = "Authorization";
 

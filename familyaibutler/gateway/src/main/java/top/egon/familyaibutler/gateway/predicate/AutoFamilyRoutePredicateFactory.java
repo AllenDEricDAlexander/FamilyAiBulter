@@ -21,7 +21,7 @@ import java.util.function.Predicate;
  * @Description: 自定义断言
  * @Version: 1.0
  */
-@Component
+//@Component
 public class AutoFamilyRoutePredicateFactory extends AbstractRoutePredicateFactory<AutoFamilyRoutePredicateFactory.Config> {
 
     public AutoFamilyRoutePredicateFactory() {

@@ -3,7 +3,6 @@ package top.egon.familyaibutler.common.pojo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.With;
 import lombok.experimental.Accessors;
@@ -21,6 +20,7 @@ import java.io.Serializable;
  * @Author: atluofu
  * @CreateTime: 2025Year-08Month-01Day-18:38
  * @Description: 接口统一返回对象
+ * * 泛型类型的返回包装类  不能类注释@Schema openapi3 生成有问题
  * @Version: 1.0
  */
 @Data
@@ -29,7 +29,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-@Schema(title = "全局接口统一返回对象", name = "Result")
 public class Result<T> implements Serializable {
     @Serial
     private static final long serialVersionUID = -4633117999621557173L;

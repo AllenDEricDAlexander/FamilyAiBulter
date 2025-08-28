@@ -51,6 +51,7 @@ public class JwtTokenFilter implements GlobalFilter, Ordered {
         // todo 限流
 
         // todo 请求过滤
+        log.error("白名单: {}", familyButlerGateWayProperties.getJwt().getIgnoreurlset());
 
         // todo 日志审计体系
 

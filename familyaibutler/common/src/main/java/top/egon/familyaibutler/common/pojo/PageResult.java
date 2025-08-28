@@ -20,6 +20,7 @@ import java.util.List;
  * @Author: atluofu
  * @CreateTime: 2025Year-08Month-01Day-19:14
  * @Description: 接口统一返回分页对象
+ * * 泛型类型的返回包装类  不能类注释@Schema openapi3 生成有问题
  * @Version: 1.0
  */
 @Data
@@ -29,7 +30,6 @@ import java.util.List;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder(builderMethodName = "PageResultBuilder")
-@Schema(title = "全局接口统一返回分页对象", name = "PageResult")
 public class PageResult<T> extends Result<List<T>> {
     @Serial
     private static final long serialVersionUID = 8938942437517754689L;

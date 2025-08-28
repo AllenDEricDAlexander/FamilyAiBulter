@@ -17,12 +17,12 @@ import java.util.List;
  * @Author: atluofu
  * @CreateTime: 2025Year-08Month-01Day-19:44
  * @Description: PageResult Record 类型
+ * * 泛型类型的返回包装类  不能类注释@Schema openapi3 生成有问题
  * @Version: 1.0
  */
 @With
 @Builder
 @Accessors(chain = true)
-@Schema(title = "全局接口统一返回分页对象", name = "PageResultRecord")
 public record PageResultRecord<T>(
         @Schema(title = "状态码", name = "code", defaultValue = "10000", type = "int") Integer code,
         @Schema(title = "描述", name = "message", defaultValue = "10000", type = "String") String message,

@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
 
@@ -22,6 +23,7 @@ import java.net.UnknownHostException;
 @Slf4j
 @ConfigurationPropertiesScan("top.egon.familyaibutler.gateway")
 @SpringBootApplication
+@EnableDiscoveryClient
 public class FamilyAIButlerGateway {
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(FamilyAIButlerGateway.class);
