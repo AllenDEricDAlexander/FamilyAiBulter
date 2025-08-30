@@ -1,0 +1,12 @@
+server:
+  port: 9527
+
+spring:
+  profiles:
+    active: dev
+
+knife4j:
+  gateway:
+    enabled: true
+    tags-sorter: order
+    strategy: manual

@@ -1,0 +1,70 @@
+# 配置有错误 需要调试
+#knife4j:
+#  gateway:
+#    enabled: true
+#
+#spring:
+#  cloud:
+#    gateway:
+#      globalcors:
+#        cors-configurations:
+#          '[/**]':
+#            allowedOrigins: "*"
+#            allowedMethods: "*"
+#            allowedHeaders: "*"
+#      enabled: true
+#      routes:
+#        - id: family
+#          uri: lb://familyBaseModel
+#          predicates:
+#            - name: Path
+#              args:
+#                - /base/**
+#            - name: Method
+#              args:
+#                - GET
+#                - POST
+#                - PUT
+#                - DELETE
+#          filters:
+#            - StripPrefix=1
+#        - id: ai
+#          uri: http://127.0.0.1:39091
+#          predicates:
+#            - name: Path
+#              args:
+#                - /ai/**
+##        - id: test
+##          uri: http://127.0.0.1:49091
+##          predicates:
+##            - name: Path
+##              args:
+##                - /test/**
+##            - AutoFamily=test # 配置类支持短匹配后，用全匹配会报错找不到
+##            #            - name: AutoFamily # 全匹配
+##            #              args:
+##            #                - userType: test
+##            - AutoFamily=test # 短匹配
+##            - Header=Authorization, ^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$ # jwt 格式校验 todo 自定义断言
+##            - RemoteAddr=192.168.3.95/24
+##            - Host=**.egon.top
+##          filters:
+##            - StripPrefix=1
+##            - name: Host
+##              args:
+##                - www.baidu.com
+##                - localhost
+##            - RedirectTo=302, http://www.baidu.com/ # 访问http://localhost:49091/test/** 跳转到http://www.baidu.com/
+##            #- SetPath=/pay/{segment}  # {segment}表示占位符，你写abc也行但要上下一致 不能模糊匹配
+##            #- PrefixPath=/test # http://localhost:9527/test/gateway/filter  被分拆为: PrefixPath + Path
+##            #- AddRequestHeader=X-Request-1,Value1  # 请求头kv，若一头含有多参则重写一行设置
+##            #- AddRequestHeader=X-Request-2,Value2
+##            #- RemoveRequestHeader=sec-fetch-site      # 删除请求头sec-fetch-site
+##            #- SetRequestHeader=sec-fetch-mode, Blue-updatebygateway # 将请求头sec-fetch-mode对应的值修改为Blue-updatebygateway
+##            #- AddRequestParameter=customerId,9527001 # 新增请求参数Parameter：k ，v
+##            #- RemoveRequestParameter=customerName   # 删除url请求参数customerName，你传递过来也是null
+##            #- AddResponseHeader=X-Response-family, BlueResponse # 新增请求参数X-Response-family 并设值为BlueResponse
+##            #- SetResponseHeader=Date,2099-11-11 # 设置回应头Date值为2099-11-11
+##            #- RemoveResponseHeader=Content-Type # 将默认自带Content-Type回应属性删除
+##      default-filters:
+##        - AddResponseHeader=X-Response-family, true

@@ -1,0 +1,39 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: familyBaseModel
+          uri: lb://family-base-model
+          predicates:
+            - name: Path
+              args:
+                - /base/**
+          filters:
+            - StripPrefix=1
+        - id: AIBaseModel
+          uri: lb://family-AI-model
+          predicates:
+            - name: Path
+              args:
+                - /ai/**
+          filters:
+            - StripPrefix=1
+
+knife4j:
+  gateway:
+    routes:
+      - name: 基础服务
+        url: /base/v3/api-docs?group=default
+        service-name: family-base-model
+        context-path: /
+        order: 1
+      - name: ai
+        url: /ai/v3/api-docs?group=default
+        service-name: family
+        context-path: /
+        order: 2
+
+
+logging:
+  level:
+    root: info
