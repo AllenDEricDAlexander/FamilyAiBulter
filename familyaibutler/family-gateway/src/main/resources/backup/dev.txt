@@ -1,4 +1,16 @@
 spring:
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      database: 2
+      timeout: 30000ms
+      lettuce:
+        pool:
+          max-active: 20
+          max-wait: -1
+          max-idle: 8
+          min-idle: 0
   cloud:
     gateway:
       routes:
@@ -18,9 +30,15 @@ spring:
                 - /ai/**
           filters:
             - StripPrefix=1
+            - name: RequestRateLimiter
+              args:
+                key-resolver: '#{@pathKeyResolver}'
+                redis-rate-limiter.replenishRate: 1
+                redis-rate-limiter.burstCapacity: 1
 
 knife4j:
   gateway:
+    enabled: true
     routes:
       - name: 基础服务
         url: /base/v3/api-docs?group=default

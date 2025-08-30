@@ -4,9 +4,17 @@ server:
 spring:
   profiles:
     active: dev
+  data:
+    redis:
+      timeout: 30000ms
+      lettuce:
+        pool:
+          max-active: 20
+          max-wait: -1
+          max-idle: 8
+          min-idle: 0
 
 knife4j:
   gateway:
-    enabled: true
     tags-sorter: order
     strategy: manual
