@@ -30,7 +30,7 @@ spring:
   profiles:
     active: dev
   application:
-    name: familyBaseModel
+    name: family-base-model
   datasource:
     hikari:
       connection-timeout: 2000
@@ -75,7 +75,7 @@ spring:
       password: mqa010225@gmail
       discovery:
         server-addr: 127.0.0.1:8848
-        namespace: 2ffea374-3c5a-45a7-bb26-b36296bda99f
+        namespace: 7bf897a8-c7e9-4e52-a038-bba2689aa1e4
 
 mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml
