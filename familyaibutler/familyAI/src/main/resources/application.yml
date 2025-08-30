@@ -28,7 +28,7 @@ spring:
   profiles:
     active: dev
   application:
-    name: familyAIModel
+    name: family-AI-model
   datasource:
     hikari:
       connection-timeout: 2000
@@ -73,6 +73,13 @@ spring:
           model: deepseek-chat
     zhipuai:
       api-key: ${AI_ZHI_PU_KEY}
+  cloud:
+    nacos:
+      username: test
+      password: mqa010225@gmail
+      discovery:
+        server-addr: 127.0.0.1:8848
+        namespace: 7bf897a8-c7e9-4e52-a038-bba2689aa1e4
 
 springdoc:
   api-docs:

@@ -3,6 +3,7 @@ package top.egon.familyaibutler.ai;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
@@ -21,6 +22,7 @@ import java.net.UnknownHostException;
  */
 @Slf4j
 @SpringBootApplication
+@EnableDiscoveryClient
 @ComponentScan(basePackages = {"top.egon.familyaibutler.ai", "top.egon.familyaibutler.common"})
 public class FamilyAIApplication {
     public static void main(String[] args) {
