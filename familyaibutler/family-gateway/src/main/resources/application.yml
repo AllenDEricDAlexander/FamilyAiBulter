@@ -18,3 +18,15 @@ knife4j:
   gateway:
     tags-sorter: order
     strategy: manual
+
+family-gateway:
+  jwt:
+    ignoreUrlSet:
+      - /user/login
+      - /user/register
+      - /user/refresh
+    authorization: Authorization
+    accessKey: MTIzNDU2
+    refresh-key: MTIzNDU2
+    access-token-expire-time: 300000
+    refresh-token-expire-time: 2592000000

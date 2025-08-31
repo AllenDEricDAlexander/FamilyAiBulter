@@ -45,9 +45,9 @@ knife4j:
         service-name: family-base-model
         context-path: /
         order: 1
-      - name: ai
+      - name: AI服务
         url: /ai/v3/api-docs?group=default
-        service-name: family
+        service-name: family-AI-model
         context-path: /
         order: 2
 

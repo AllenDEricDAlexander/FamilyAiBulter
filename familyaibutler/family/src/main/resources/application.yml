@@ -75,7 +75,7 @@ spring:
       password: mqa010225@gmail
       discovery:
         server-addr: 127.0.0.1:8848
-        namespace: 7bf897a8-c7e9-4e52-a038-bba2689aa1e4
+        namespace: ${NACOS_NAMESPACE:5a40d6a8-823c-4fc6-9c58-8c6e964dc91f}
 
 mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml
