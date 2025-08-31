@@ -10,7 +10,6 @@
     </parent>
     <packaging>pom</packaging>
     <modules>
-        <module>gateway</module>
         <module>family</module>
         <module>common</module>
         <module>familyAI</module>
