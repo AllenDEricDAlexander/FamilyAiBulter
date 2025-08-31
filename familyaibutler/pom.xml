@@ -15,6 +15,7 @@
         <module>familyAI</module>
         <module>uaa</module>
         <module>family-gateway</module>
+        <module>family-ai-butler-cache-spring-boot-starter</module>
     </modules>
     <groupId>top.egon</groupId>
     <artifactId>familyaibutler</artifactId>

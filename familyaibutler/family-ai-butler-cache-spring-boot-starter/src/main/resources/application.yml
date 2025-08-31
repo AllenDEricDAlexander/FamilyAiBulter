@@ -1,0 +1,8 @@
+top:
+  egon:
+    cache:
+      ttl: 300
+      max-size: 5000
+      key-prefix: myapp
+      topic: myapp-cache-broadcast
+      name: default
