@@ -48,7 +48,7 @@
         <java.version>17</java.version>
         <spring-cloud.version>2023.0.0</spring-cloud.version>
         <spring-ai.version>1.0.0</spring-ai.version>
-        <spring-ai-alibaba.version>1.0.0.2</spring-ai-alibaba.version>
+        <spring-ai-alibaba.version>1.0.0.4</spring-ai-alibaba.version>
         <spring-cloud-alibaba.version>2022.0.0.0-RC2</spring-cloud-alibaba.version>
         <knife4j.version>4.4.0</knife4j.version>
         <mybatis-plus.version>3.5.12</mybatis-plus.version>
